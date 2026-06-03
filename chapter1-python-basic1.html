@@ -246,6 +246,92 @@ print(type(b))</div>
       <div class="summary"><strong>다음 단계:</strong> 다음 문법 단원에서는 조건문 <code>if</code>, 반복문 <code>for</code>, <code>enumerate</code>, 함수와 초보자 오류 읽기를 다룹니다.</div>
     </section>
 
+    <section class="card">
+      <h2>10. 종합 실습 문제</h2>
+      <h3>1. 문제 출제</h3>
+      <p>작은 카페의 하루 판매 데이터를 이용해 <strong>메뉴별 매출과 총매출을 계산하는 프로그램</strong>을 작성해 보세요.</p>
+      <p>아래 조건을 모두 만족해야 합니다.</p>
+      <ul>
+        <li>카페 이름은 문자열 변수에 저장합니다.</li>
+        <li>메뉴 이름 3개는 튜플에 저장합니다.</li>
+        <li>메뉴 가격 3개는 리스트에 저장합니다.</li>
+        <li>메뉴별 판매 수량 3개는 리스트에 저장합니다.</li>
+        <li>각 메뉴의 매출은 <code>가격 × 판매 수량</code>으로 계산합니다.</li>
+        <li>총매출과 메뉴당 평균 매출을 계산합니다.</li>
+        <li><code>print()</code>와 <code>format()</code>을 사용해 결과를 보기 좋게 출력합니다.</li>
+      </ul>
+
+      <h3>2. 문제 해결에 필요한 개념 요약</h3>
+      <table class="table">
+        <thead><tr><th>개념</th><th>이 문제에서 쓰는 방법</th></tr></thead>
+        <tbody>
+          <tr><td>문자열</td><td>카페 이름과 출력 문장을 저장하거나 화면에 표시합니다.</td></tr>
+          <tr><td>변수</td><td>가격, 수량, 메뉴별 매출, 총매출, 평균 매출을 저장합니다.</td></tr>
+          <tr><td>리스트</td><td>가격과 판매 수량처럼 나중에 바뀔 수 있는 값을 묶어 저장합니다.</td></tr>
+          <tr><td>튜플</td><td>메뉴 이름처럼 고정된 값을 묶어 저장합니다.</td></tr>
+          <tr><td>인덱스</td><td><code>menus[0]</code>, <code>prices[0]</code>, <code>counts[0]</code>처럼 같은 위치의 데이터를 연결합니다.</td></tr>
+          <tr><td>사칙연산</td><td>곱셈으로 메뉴별 매출을 구하고, 덧셈과 나눗셈으로 총매출과 평균 매출을 구합니다.</td></tr>
+          <tr><td>출력</td><td><code>print()</code>와 <code>format()</code>으로 결과를 읽기 좋게 출력합니다.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>3. 수도코드</h3>
+      <div class="codebox">카페 이름을 문자열 변수에 저장한다.
+메뉴 이름 3개를 튜플에 저장한다.
+가격 3개를 리스트에 저장한다.
+판매 수량 3개를 리스트에 저장한다.
+
+첫 번째 메뉴 매출 = 첫 번째 가격 * 첫 번째 수량
+두 번째 메뉴 매출 = 두 번째 가격 * 두 번째 수량
+세 번째 메뉴 매출 = 세 번째 가격 * 세 번째 수량
+
+총매출 = 첫 번째 메뉴 매출 + 두 번째 메뉴 매출 + 세 번째 메뉴 매출
+평균 매출 = 총매출 / 메뉴 개수
+
+카페 이름을 출력한다.
+메뉴별 매출을 출력한다.
+총매출과 평균 매출을 출력한다.</div>
+
+      <h3>4. 실행 예시</h3>
+      <p>아래 값으로 프로그램을 작성해 보세요.</p>
+      <table class="table">
+        <thead><tr><th>항목</th><th>예시 값</th></tr></thead>
+        <tbody>
+          <tr><td>카페 이름</td><td><code>파이썬 카페</code></td></tr>
+          <tr><td>메뉴</td><td><code>아메리카노</code>, <code>카페라떼</code>, <code>샌드위치</code></td></tr>
+          <tr><td>가격</td><td><code>4500</code>, <code>5000</code>, <code>6500</code></td></tr>
+          <tr><td>판매 수량</td><td><code>12</code>, <code>8</code>, <code>5</code></td></tr>
+        </tbody>
+      </table>
+      <p>작성할 코드 예시는 다음과 같습니다.</p>
+      <div class="codebox">cafe_name = "파이썬 카페"
+menus = ("아메리카노", "카페라떼", "샌드위치")
+prices = [4500, 5000, 6500]
+counts = [12, 8, 5]
+
+sales_0 = prices[0] * counts[0]
+sales_1 = prices[1] * counts[1]
+sales_2 = prices[2] * counts[2]
+
+total_sales = sales_0 + sales_1 + sales_2
+average_sales = total_sales / 3
+
+print("[{} 하루 매출 요약]".format(cafe_name))
+print("{} 매출: {}원".format(menus[0], sales_0))
+print("{} 매출: {}원".format(menus[1], sales_1))
+print("{} 매출: {}원".format(menus[2], sales_2))
+print("총매출: {}원".format(total_sales))
+print("메뉴당 평균 매출: {}원".format(average_sales))</div>
+      <p>예상 출력값은 다음과 같습니다.</p>
+      <div class="codebox">[파이썬 카페 하루 매출 요약]
+아메리카노 매출: 54000원
+카페라떼 매출: 40000원
+샌드위치 매출: 32500원
+총매출: 126500원
+메뉴당 평균 매출: 42166.666666666664원</div>
+      <div class="callout"><strong>도전 과제:</strong> 가격이나 판매 수량을 다른 값으로 바꿔 실행해 보세요. 변수에 저장된 값이 바뀌면 계산 결과도 함께 바뀌는 것을 확인할 수 있습니다.</div>
+    </section>
+
     <section class="card next">
       <a href="chapter1.html">← Chapter 1 목록으로</a>
       <a href="chapter1.html">다음 학습: 파이썬 기본 문법 2 →</a>
