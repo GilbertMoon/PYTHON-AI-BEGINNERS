@@ -2,13 +2,10 @@
 4개 강의 PPT 파일에서 슬라이드에 표시된 이미지를 추출하여 images/ 폴더에 저장합니다.
 
 사용 방법
-1. 레포지토리 루트에 아래 PPT 파일 4개를 둡니다.
-   - PART1_파이썬기초와CSV다루기.pptx
-   - PART2_엑셀CSV전처리와데이터시각화.pptx
-   - PART3_AI머신러닝개념과_회귀_분류모델.pptx
-   - PART4_비지도학습_딥러닝맛보기와미니프로젝트.pptx
+1. 레포지토리 루트 또는 PPT/ 폴더에 PPT 파일 4개를 둡니다.
+   파일명은 PART1, PART2, PART3, PART4로 시작하면 자동으로 찾습니다.
 2. 필요한 패키지를 설치합니다.
-   pip install python-pptx pillow pymupdf
+   python -m pip install --upgrade pymupdf python-pptx pillow
 3. 실행합니다.
    python scripts/extract_ppt_images.py
 
@@ -33,15 +30,33 @@ from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
+PPT_DIR = ROOT_DIR / "PPT"
 IMAGE_DIR = ROOT_DIR / "images"
 RENDER_DIR = ROOT_DIR / "_rendered_pdfs"
 
-PPT_FILES = [
-    ("chapter1", ROOT_DIR / "PART1_파이썬기초와CSV다루기.pptx"),
-    ("chapter2", ROOT_DIR / "PART2_엑셀CSV전처리와데이터시각화.pptx"),
-    ("chapter3", ROOT_DIR / "PART3_AI머신러닝개념과_회귀_분류모델.pptx"),
-    ("chapter4", ROOT_DIR / "PART4_비지도학습_딥러닝맛보기와미니프로젝트.pptx"),
+PPT_PATTERNS = [
+    ("chapter1", "PART1*.pptx"),
+    ("chapter2", "PART2*.pptx"),
+    ("chapter3", "PART3*.pptx"),
+    ("chapter4", "PART4*.pptx"),
 ]
+
+
+def find_ppt_file(pattern: str) -> Path | None:
+    """ROOT_DIR와 PPT_DIR에서 pattern에 맞는 PPT 파일을 찾습니다."""
+    candidates: list[Path] = []
+
+    for base_dir in (PPT_DIR, ROOT_DIR):
+        if base_dir.exists():
+            candidates.extend(sorted(base_dir.glob(pattern)))
+
+    # 임시 파일(~$...) 제외
+    candidates = [path for path in candidates if not path.name.startswith("~$")]
+
+    if not candidates:
+        return None
+
+    return candidates[0]
 
 
 def clamp(value: float, min_value: float, max_value: float) -> float:
@@ -120,12 +135,14 @@ def main() -> None:
 
     manifest = []
 
-    for chapter_name, ppt_path in PPT_FILES:
-        if not ppt_path.exists():
-            print(f"[SKIP] PPT 파일 없음: {ppt_path.name}")
+    for chapter_name, pattern in PPT_PATTERNS:
+        ppt_path = find_ppt_file(pattern)
+
+        if ppt_path is None:
+            print(f"[SKIP] PPT 파일 없음: {pattern}")
             continue
 
-        print(f"[START] {chapter_name}: {ppt_path.name}")
+        print(f"[START] {chapter_name}: {ppt_path.relative_to(ROOT_DIR)}")
         chapter_dir = IMAGE_DIR / chapter_name
         chapter_dir.mkdir(parents=True, exist_ok=True)
 
