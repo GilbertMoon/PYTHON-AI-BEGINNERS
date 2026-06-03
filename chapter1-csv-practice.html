@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Chapter 1-8 CSV 실습</title><style>*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;background:#f5f7fb;color:#1f2937;line-height:1.75}header{padding:56px 24px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff}.wrap{width:min(1080px,calc(100% - 40px));margin:0 auto}.badge{display:inline-block;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);font-size:14px;margin-bottom:14px}h1{margin:0;font-size:clamp(30px,5vw,48px);letter-spacing:-.04em;line-height:1.2}header p{max-width:820px;margin:16px 0 0;opacity:.94;font-size:18px}.nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.nav a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.12)}main{padding:36px 0 72px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:28px;margin-bottom:22px;box-shadow:0 12px 28px rgba(15,23,42,.05)}h2{margin:0 0 16px;font-size:28px;letter-spacing:-.03em}h3{margin:24px 0 10px;color:#1e40af;font-size:21px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}.mini{background:#eff6ff;border:1px solid #bfdbfe;border-radius:16px;padding:18px}.mini strong{display:block;color:#1e40af;margin-bottom:6px}figure{margin:22px 0;padding:18px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:16px}figure img{display:block;max-width:100%;height:auto;margin:0 auto;border-radius:10px;background:#fff}figcaption{margin-top:12px;color:#4b5563;font-size:14px;text-align:center}ul,ol{margin:10px 0 0;padding-left:22px}li{margin:7px 0}.callout{background:#fff7ed;border-left:6px solid #f97316;border-radius:14px;padding:18px 20px;margin-top:16px}.summary{background:#ecfdf5;border-left:6px solid #10b981;border-radius:14px;padding:18px 20px;margin-top:16px}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 14px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}.table th{background:#eff6ff;color:#1e40af}.table tr:last-child td{border-bottom:0}code{background:#f1f5f9;border-radius:6px;padding:2px 6px;color:#0f172a}.codebox{background:#0f172a;color:#e2e8f0;border-radius:14px;padding:16px 18px;overflow:auto;font-family:Consolas,Monaco,monospace;font-size:15px;line-height:1.6;white-space:pre-wrap;word-break:normal;tab-size:4}.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.next a{display:inline-block;text-decoration:none;background:#2563eb;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700}</style></head>
+<body><header><div class="wrap"><div class="badge">Chapter 1-8 · CSV 실습</div><h1>행 필터링, 열 선택, 헤더 추가, 결과 저장</h1><p>CSV 파일을 단순히 읽는 단계에서 한 걸음 더 나아가 필요한 데이터만 선택하고 새 파일로 저장하는 실습을 진행합니다.</p><nav class="nav"><a href="index.html">메인</a><a href="chapter1.html">Chapter 1</a><a href="chapter1-csv-read-write.html">이전: CSV 파일 읽고 쓰기</a><a href="chapter2.html">Chapter 2</a></nav></div></header>
+<main class="wrap">
+<section class="card"><h2>1. 이번 단원에서 배우는 것</h2><p>실제 데이터 분석에서는 원본 데이터를 그대로 사용하기보다 필요한 행과 열만 골라 새로운 분석용 데이터로 만드는 경우가 많습니다. 이번 단원에서는 간단한 학생 점수 데이터를 기준으로 필터링과 저장을 연습합니다.</p><div class="grid"><div class="mini"><strong>행 필터링</strong>조건에 맞는 행만 선택합니다.</div><div class="mini"><strong>열 선택</strong>필요한 컬럼만 남깁니다.</div><div class="mini"><strong>컬럼 추가</strong>새 계산 결과를 컬럼으로 추가합니다.</div><div class="mini"><strong>결과 저장</strong>분석용 CSV 파일로 저장합니다.</div></div></section>
+<section class="card"><h2>2. 실습 데이터 준비</h2><p>다음과 같은 학생 점수 데이터를 사용한다고 가정합니다. 파일명은 <code>students.csv</code>입니다.</p><div class="codebox">name,grade,score,attendance
+민수,1,85,95
+지연,1,90,88
+현우,2,72,80
+서연,2,95,98
+도윤,1,68,70</div><p>이 데이터에서 점수와 출석률을 기준으로 우수 학생만 선택하고, 필요한 컬럼만 남기는 것이 목표입니다.</p></section>
+<section class="card"><h2>3. CSV 파일 읽기</h2><p>먼저 pandas로 CSV 파일을 읽습니다. 읽은 데이터는 DataFrame으로 저장됩니다.</p><div class="codebox">import pandas as pd
+
+df = pd.read_csv("students.csv")
+print(df)</div><div class="callout"><strong>확인 습관:</strong> 데이터를 읽은 뒤에는 반드시 <code>head()</code>, <code>shape</code>, <code>columns</code>로 구조를 확인하세요.</div><div class="codebox">print(df.head())
+print(df.shape)
+print(df.columns)</div></section>
+<section class="card"><h2>4. 행 필터링</h2><p>행 필터링은 조건을 만족하는 행만 남기는 작업입니다. 예를 들어 점수가 80점 이상인 학생만 선택할 수 있습니다.</p><figure><img src="images/chapter1/chapter1_slide066_img01.png" alt="조건 필터링 실습"/><figcaption>조건식을 사용하면 원하는 행만 선택할 수 있습니다.</figcaption></figure><div class="codebox">high_score = df[df["score"] >= 80]
+print(high_score)</div><h3>조건을 여러 개 사용하는 경우</h3><p>점수가 80점 이상이고 출석률이 90 이상인 학생만 선택하려면 조건을 괄호로 묶고 <code>&</code> 기호를 사용합니다.</p><div class="codebox">excellent = df[(df["score"] >= 80) & (df["attendance"] >= 90)]
+print(excellent)</div></section>
+<section class="card"><h2>5. 열 선택</h2><p>분석에 필요한 컬럼만 남길 수 있습니다. 예를 들어 이름, 점수, 출석률만 남기려면 컬럼 이름 리스트를 사용합니다.</p><div class="codebox">selected = df[["name", "score", "attendance"]]
+print(selected)</div><div class="summary"><strong>데이터 분석 연결:</strong> 실제 프로젝트에서는 컬럼이 수십 개 이상인 경우가 많기 때문에 필요한 컬럼만 선택하는 습관이 중요합니다.</div></section>
+<section class="card"><h2>6. 새 컬럼 추가</h2><p>기존 컬럼을 이용해 새로운 컬럼을 만들 수 있습니다. 예를 들어 점수가 80점 이상이면 합격 여부를 <code>True</code>로 저장합니다.</p><div class="codebox">df["pass"] = df["score"] >= 80
+print(df)</div><p>문자열로 표시하고 싶다면 간단한 조건식을 활용할 수 있습니다.</p><div class="codebox">df["result"] = df["score"].apply(lambda x: "합격" if x >= 80 else "재시험")
+print(df)</div></section>
+<section class="card"><h2>7. 결과 저장</h2><p>처리한 결과는 <code>to_csv()</code>로 새 파일에 저장합니다. 원본 파일을 덮어쓰기보다 새 이름으로 저장하는 것이 안전합니다.</p><div class="codebox">excellent = df[(df["score"] >= 80) & (df["attendance"] >= 90)]
+excellent = excellent[["name", "score", "attendance", "result"]]
+
+excellent.to_csv("excellent_students.csv", index=False, encoding="utf-8-sig")</div><div class="callout"><strong>권장:</strong> 원본 데이터는 그대로 두고, 처리 결과는 <code>result</code>, <code>processed</code>, <code>filtered</code> 같은 이름을 붙여 새 파일로 저장하세요.</div></section>
+<section class="card"><h2>8. 실습 체크리스트</h2><ul><li>CSV 파일을 pandas로 읽을 수 있다.</li><li>데이터의 행과 열 구조를 확인할 수 있다.</li><li>조건식을 사용해 필요한 행만 선택할 수 있다.</li><li>필요한 컬럼만 선택할 수 있다.</li><li>새 컬럼을 추가할 수 있다.</li><li>처리 결과를 새 CSV 파일로 저장할 수 있다.</li></ul></section>
+<section class="card"><h2>9. 종합 실습 문제</h2><h3>1. 문제 출제</h3><p>학생 점수 데이터에서 <strong>우수 학생 명단</strong>을 추출하여 새 CSV 파일로 저장하는 프로그램을 작성해 보세요.</p><ul><li><code>students.csv</code> 파일을 읽습니다.</li><li>점수 <code>score</code>가 80점 이상인 학생만 선택합니다.</li><li>출석률 <code>attendance</code>가 90 이상인 학생만 선택합니다.</li><li><code>name</code>, <code>score</code>, <code>attendance</code> 컬럼만 남깁니다.</li><li>결과를 <code>excellent_students.csv</code>로 저장합니다.</li></ul><h3>2. 문제 해결에 필요한 개념 요약</h3><table class="table"><thead><tr><th>개념</th><th>활용 방법</th></tr></thead><tbody><tr><td>CSV 읽기</td><td><code>pd.read_csv()</code>로 데이터를 읽습니다.</td></tr><tr><td>행 필터링</td><td>점수와 출석률 조건을 동시에 적용합니다.</td></tr><tr><td>열 선택</td><td>필요한 컬럼만 남깁니다.</td></tr><tr><td>CSV 저장</td><td><code>to_csv()</code>로 결과를 저장합니다.</td></tr></tbody></table><h3>3. 수도코드</h3><div class="codebox">pandas를 불러온다.
+students.csv 파일을 읽는다.
+score가 80 이상인지 조건을 만든다.
+attendance가 90 이상인지 조건을 만든다.
+두 조건을 모두 만족하는 행만 선택한다.
+name, score, attendance 컬럼만 선택한다.
+결과를 화면에 출력한다.
+excellent_students.csv 파일로 저장한다.</div><h3>4. 실행 예시</h3><p>입력 CSV 예시는 다음과 같습니다.</p><div class="codebox">name,grade,score,attendance
+민수,1,85,95
+지연,1,90,88
+현우,2,72,80
+서연,2,95,98
+도윤,1,68,70</div><p>예상 출력값은 다음과 같습니다.</p><div class="codebox">  name  score  attendance
+0   민수     85          95
+3   서연     95          98</div></section>
+<section class="card next"><a href="chapter1.html">← Chapter 1 목록으로</a><a href="chapter2.html">Chapter 2로 이동 →</a></section>
+</main></body></html>
