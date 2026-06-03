@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 1 상세 확장 가이드</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;background:#f5f7fb;color:#1f2937;line-height:1.8}header{padding:58px 24px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff}.wrap{width:min(1080px,calc(100% - 40px));margin:0 auto}.badge{display:inline-block;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);font-size:14px;margin-bottom:14px}h1{margin:0;font-size:clamp(30px,5vw,48px);letter-spacing:-.04em;line-height:1.2}header p{max-width:880px;margin:16px 0 0;opacity:.94;font-size:18px}.nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.nav a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.12)}main{padding:36px 0 72px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:28px;margin-bottom:22px;box-shadow:0 12px 28px rgba(15,23,42,.05)}h2{margin:0 0 16px;font-size:28px;letter-spacing:-.03em}h3{margin:26px 0 10px;color:#1e40af;font-size:21px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}.mini{background:#eff6ff;border:1px solid #bfdbfe;border-radius:16px;padding:18px}.mini strong{display:block;color:#1e40af;margin-bottom:6px}ul,ol{margin:10px 0 0;padding-left:22px}li{margin:7px 0}.callout{background:#fff7ed;border-left:6px solid #f97316;border-radius:14px;padding:18px 20px;margin-top:16px}.summary{background:#ecfdf5;border-left:6px solid #10b981;border-radius:14px;padding:18px 20px;margin-top:16px}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 14px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}.table th{background:#eff6ff;color:#1e40af}code{background:#f1f5f9;border-radius:6px;padding:2px 6px;color:#0f172a}.codebox{background:#0f172a;color:#e2e8f0;border-radius:14px;padding:16px 18px;overflow:auto;font-family:Consolas,Monaco,monospace;font-size:15px;line-height:1.65;white-space:pre-wrap;tab-size:4}.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.next a{display:inline-block;text-decoration:none;background:#2563eb;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700}
+  </style>
+</head>
+<body>
+<header><div class="wrap"><div class="badge">Chapter 1 · 상세 확장 가이드</div><h1>파이썬 기초와 CSV 데이터 다루기 보강</h1><p>각 단원에서 “왜 배우는지 → 코드가 어떻게 동작하는지 → 결과를 어떻게 해석하는지 → 어떤 오류가 자주 나는지”를 초보자 기준으로 더 자세히 설명합니다.</p><nav class="nav"><a href="index.html">메인</a><a href="chapter1.html">Chapter 1</a><a href="chapter1-semi-project.html">세미프로젝트</a></nav></div></header>
+<main class="wrap">
+<section class="card"><h2>1. Chapter 1을 배우는 이유</h2><p>데이터 분석 수업에서 파이썬 문법을 배우는 이유는 문법 자체를 암기하기 위해서가 아닙니다. 엑셀이나 CSV에 들어 있는 데이터를 코드로 읽고, 필요한 값을 계산하고, 조건에 맞는 데이터만 골라내기 위해 최소한의 문법이 필요합니다.</p><p>입문자는 처음부터 모든 문법을 완벽히 외우려고 하면 쉽게 지칩니다. 이 장에서는 “데이터를 다루기 위해 꼭 필요한 문법”만 먼저 익힙니다. 변수는 값을 저장하기 위해, 리스트와 튜플은 여러 값을 묶기 위해, 조건문과 반복문은 많은 데이터를 자동으로 처리하기 위해 사용합니다.</p><div class="grid"><div class="mini"><strong>학습 관점</strong>문법 암기보다 데이터 처리 상황과 연결합니다.</div><div class="mini"><strong>실습 관점</strong>코드를 직접 실행하고 출력 결과를 확인합니다.</div><div class="mini"><strong>오류 관점</strong>오류 메시지를 읽고 원인을 추정하는 습관을 만듭니다.</div></div></section>
+<section class="card"><h2>2. 주피터 노트북 학습법</h2><p>주피터 노트북은 초보자에게 좋은 실습 환경입니다. 코드를 한 줄씩 실행해 볼 수 있고, 코드 사이에 설명을 마크다운으로 남길 수 있기 때문입니다. 수업에서는 한 번에 긴 코드를 작성하기보다 작은 셀 단위로 나누어 실행하는 방식이 좋습니다.</p><h3>권장 셀 구성</h3><ol><li>마크다운 셀에 이번 셀에서 확인할 내용을 적습니다.</li><li>코드 셀에 3~10줄 정도의 작은 코드를 작성합니다.</li><li>실행 결과를 확인합니다.</li><li>결과가 예상과 다르면 변수명, 괄호, 따옴표, 들여쓰기를 점검합니다.</li></ol><div class="codebox"># 좋은 실습 흐름 예시
+# 1. 데이터를 만든다.
+scores = [80, 90, 75]
+
+# 2. 평균을 계산한다.
+average = sum(scores) / len(scores)
+
+# 3. 결과를 출력한다.
+print("평균 점수:", average)</div><div class="callout"><strong>초보자 팁:</strong> 오류가 나면 코드 전체를 지우지 말고, 가장 마지막에 수정한 줄부터 확인하세요. 대부분의 초보자 오류는 오타, 괄호, 따옴표, 들여쓰기에서 발생합니다.</div></section>
+<section class="card"><h2>3. 파이썬 기본 문법 1 보강</h2><p>사칙연산, 변수, 자료형, 문자열, 리스트, 튜플은 이후 모든 실습의 바탕입니다. 특히 데이터 분석에서는 컬럼 값을 계산하고, 파일명을 변수에 저장하고, 여러 컬럼명을 리스트로 관리하는 일이 많습니다.</p><h3>변수를 쓰는 실무적 이유</h3><p>변수를 사용하면 값에 이름을 붙일 수 있습니다. 예를 들어 기준 점수 80을 여러 곳에서 직접 쓰면 나중에 기준이 바뀌었을 때 모든 코드를 찾아 수정해야 합니다. 하지만 <code>pass_score = 80</code>처럼 변수로 저장하면 한 곳만 바꾸면 됩니다.</p><div class="codebox">pass_score = 80
+score = 85
+
+if score >= pass_score:
+    print("합격")</div><h3>리스트와 튜플 구분</h3><table class="table"><tr><th>구분</th><th>사용 상황</th><th>예시</th></tr><tr><td>리스트</td><td>값이 바뀔 수 있는 데이터 묶음</td><td>점수 목록, 판매 수량</td></tr><tr><td>튜플</td><td>잘 바뀌지 않는 고정 값 묶음</td><td>메뉴 이름, 요일 이름</td></tr></table><p>실습에서는 메뉴 이름은 튜플, 가격과 판매 수량은 리스트로 저장해 보면 두 자료형의 차이를 자연스럽게 이해할 수 있습니다.</p></section>
+<section class="card"><h2>4. 파이썬 기본 문법 2 보강</h2><p>조건문과 반복문은 데이터 분석 자동화의 핵심입니다. 데이터가 3개일 때는 직접 계산해도 되지만, 데이터가 300개 또는 30,000개가 되면 반복문과 조건문이 필요합니다.</p><h3>조건문을 데이터 분석에 연결하기</h3><p>조건문은 특정 기준을 만족하는지 판단합니다. 예를 들어 점수가 80점 이상인지, 매출이 40,000원 이상인지, 파일명이 csv로 끝나는지 판단할 때 사용합니다.</p><div class="codebox">sales = 54000
+
+if sales >= 40000:
+    print("우수 판매 메뉴")
+else:
+    print("일반 판매 메뉴")</div><h3>반복문을 쓰는 이유</h3><p>반복문은 같은 작업을 여러 데이터에 반복 적용합니다. 메뉴 3개의 매출을 계산할 때도 반복문을 쓰면 코드가 간결해지고, 메뉴가 100개로 늘어나도 같은 구조로 처리할 수 있습니다.</p><div class="codebox">menus = ["아메리카노", "카페라떼", "샌드위치"]
+prices = [4500, 5000, 6500]
+counts = [12, 8, 5]
+
+for i, menu in enumerate(menus):
+    sales = prices[i] * counts[i]
+    print(menu, sales)</div></section>
+<section class="card"><h2>5. NumPy 보강</h2><p>NumPy는 숫자 계산을 편하게 하기 위한 도구입니다. 리스트로도 계산할 수 있지만, NumPy 배열을 사용하면 여러 숫자에 같은 계산을 한 번에 적용할 수 있습니다. 머신러닝 모델도 내부적으로는 많은 숫자 배열을 계산합니다.</p><h3>리스트와 NumPy 배열의 차이</h3><div class="codebox">import numpy as np
+
+scores_list = [70, 80, 90]
+scores_array = np.array([70, 80, 90])
+
+# 리스트는 이런 계산이 바로 되지 않습니다.
+# print(scores_list + 5)
+
+# NumPy 배열은 전체 원소에 한 번에 계산이 적용됩니다.
+print(scores_array + 5)</div><p>이 차이는 나중에 여러 컬럼 값을 한 번에 변환하거나, 모델 입력 데이터를 계산할 때 매우 중요합니다.</p><h3>조건 필터링 이해</h3><p>조건 필터링은 “조건을 만족하는 값만 선택하는 방법”입니다. pandas의 행 필터링도 이와 같은 방식으로 이해할 수 있습니다.</p><div class="codebox">scores = np.array([70, 85, 90, 60, 95])
+mask = scores >= 80
+print(mask)
+print(scores[mask])</div></section>
+<section class="card"><h2>6. 파일 입출력과 CSV 보강</h2><p>데이터 분석은 대부분 외부 파일에서 데이터를 읽어오면서 시작합니다. 파일 경로를 정확히 이해하지 못하면 <code>FileNotFoundError</code>가 자주 발생합니다. 따라서 파일명, 폴더 위치, 상대 경로를 먼저 확인하는 습관이 중요합니다.</p><h3>CSV를 배워야 하는 이유</h3><p>CSV는 가장 단순하고 널리 쓰이는 데이터 교환 형식입니다. 엑셀에서도 열 수 있고, 파이썬에서도 쉽게 읽을 수 있습니다. 실무에서 시스템 간 데이터를 주고받을 때 CSV 형식이 자주 사용됩니다.</p><h3>자주 나는 오류</h3><table class="table"><tr><th>오류</th><th>원인</th><th>해결 방법</th></tr><tr><td>FileNotFoundError</td><td>파일 경로가 잘못됨</td><td>현재 작업 폴더와 파일 위치 확인</td></tr><tr><td>UnicodeDecodeError</td><td>인코딩 문제</td><td><code>encoding="utf-8"</code> 또는 <code>cp949</code> 확인</td></tr><tr><td>KeyError</td><td>컬럼명 오타</td><td><code>df.columns</code>로 실제 컬럼명 확인</td></tr></table></section>
+<section class="card"><h2>7. 실습 확장 과제</h2><p>기존 단원별 실습을 마친 뒤에는 아래 순서로 난이도를 조금 높여보는 것이 좋습니다.</p><ol><li>예시 데이터의 값을 직접 바꿔서 결과가 어떻게 달라지는지 확인합니다.</li><li>기준값을 변수로 분리합니다. 예: <code>pass_score</code>, <code>sales_threshold</code></li><li>출력 결과를 더 읽기 좋은 문장으로 바꿉니다.</li><li>조건을 하나 더 추가합니다. 예: 매출 40,000원 이상이면서 판매 수량 5개 이상</li><li>결과를 CSV 또는 txt 파일로 저장합니다.</li></ol><div class="summary"><strong>Chapter 1 핵심 정리:</strong> 파이썬 기초 문법은 데이터 분석을 위한 도구입니다. 변수, 리스트, 조건문, 반복문, 파일 입출력, CSV 처리를 연결해서 “작은 자동화 프로그램”을 만들 수 있으면 Chapter 1 목표를 달성한 것입니다.</div></section>
+<section class="card next"><a href="chapter1.html">← Chapter 1 목록</a><a href="chapter1-semi-project.html">세미프로젝트로 이동 →</a></section>
+</main></body></html>
