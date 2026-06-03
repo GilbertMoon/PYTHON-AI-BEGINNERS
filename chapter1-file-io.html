@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Chapter 1-6 파일 입출력 기초</title><style>*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;background:#f5f7fb;color:#1f2937;line-height:1.75}header{padding:56px 24px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff}.wrap{width:min(1080px,calc(100% - 40px));margin:0 auto}.badge{display:inline-block;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);font-size:14px;margin-bottom:14px}h1{margin:0;font-size:clamp(30px,5vw,48px);letter-spacing:-.04em;line-height:1.2}header p{max-width:820px;margin:16px 0 0;opacity:.94;font-size:18px}.nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.nav a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.12)}main{padding:36px 0 72px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:28px;margin-bottom:22px;box-shadow:0 12px 28px rgba(15,23,42,.05)}h2{margin:0 0 16px;font-size:28px;letter-spacing:-.03em}h3{margin:24px 0 10px;color:#1e40af;font-size:21px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}.mini{background:#eff6ff;border:1px solid #bfdbfe;border-radius:16px;padding:18px}.mini strong{display:block;color:#1e40af;margin-bottom:6px}figure{margin:22px 0;padding:18px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:16px}figure img{display:block;max-width:100%;height:auto;margin:0 auto;border-radius:10px;background:#fff}figcaption{margin-top:12px;color:#4b5563;font-size:14px;text-align:center}ul,ol{margin:10px 0 0;padding-left:22px}li{margin:7px 0}.callout{background:#fff7ed;border-left:6px solid #f97316;border-radius:14px;padding:18px 20px;margin-top:16px}.summary{background:#ecfdf5;border-left:6px solid #10b981;border-radius:14px;padding:18px 20px;margin-top:16px}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 14px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}.table th{background:#eff6ff;color:#1e40af}.table tr:last-child td{border-bottom:0}code{background:#f1f5f9;border-radius:6px;padding:2px 6px;color:#0f172a}.codebox{background:#0f172a;color:#e2e8f0;border-radius:14px;padding:16px 18px;overflow:auto;font-family:Consolas,Monaco,monospace;font-size:15px;line-height:1.6;white-space:pre-wrap;word-break:normal;tab-size:4}.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.next a{display:inline-block;text-decoration:none;background:#2563eb;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700}</style></head>
+<body><header><div class="wrap"><div class="badge">Chapter 1-6 · 파일 입출력 기초</div><h1>텍스트 파일 읽기/쓰기와 여러 파일 접근</h1><p>파이썬으로 파일을 만들고, 읽고, 저장하는 기본 흐름을 익힙니다. CSV와 엑셀 처리로 넘어가기 전 꼭 필요한 기초입니다.</p><nav class="nav"><a href="index.html">메인</a><a href="chapter1.html">Chapter 1</a><a href="chapter1-numpy.html">이전: NumPy 기초</a><a href="chapter1-csv-read-write.html">다음: CSV 파일 읽고 쓰기</a></nav></div></header>
+<main class="wrap">
+<section class="card"><h2>1. 이번 단원에서 배우는 것</h2><p>데이터 분석에서는 대부분 외부 파일에서 데이터를 가져옵니다. 이 단원에서는 가장 단순한 텍스트 파일을 기준으로 파일을 열고, 쓰고, 읽고, 닫는 흐름을 이해합니다.</p><div class="grid"><div class="mini"><strong>파일 쓰기</strong>파이썬에서 텍스트 파일을 생성합니다.</div><div class="mini"><strong>파일 읽기</strong>저장된 파일 내용을 다시 불러옵니다.</div><div class="mini"><strong>with 문</strong>파일을 안전하게 열고 자동으로 닫습니다.</div><div class="mini"><strong>glob</strong>여러 파일을 한 번에 찾습니다.</div></div></section>
+<section class="card"><h2>2. 파일 경로 이해하기</h2><p>파일을 다루려면 먼저 파일이 어디에 있는지 알아야 합니다. 현재 노트북이 있는 폴더와 파일이 있는 폴더가 다르면 경로를 정확히 지정해야 합니다.</p><table class="table"><thead><tr><th>구분</th><th>의미</th><th>예시</th></tr></thead><tbody><tr><td>상대 경로</td><td>현재 작업 폴더 기준 경로</td><td><code>data/sample.txt</code></td></tr><tr><td>절대 경로</td><td>드라이브부터 시작하는 전체 경로</td><td><code>C:/dev/data/sample.txt</code></td></tr></tbody></table><div class="callout"><strong>초보자 주의:</strong> Windows 경로에서 역슬래시 <code>\</code> 때문에 오류가 날 수 있으므로 수업에서는 <code>/</code> 사용을 권장합니다.</div></section>
+<section class="card"><h2>3. 텍스트 파일 쓰기</h2><p><code>open()</code> 함수로 파일을 열고, <code>write()</code>로 내용을 저장할 수 있습니다. <code>w</code> 모드는 새로 쓰기 모드입니다.</p><figure><img src="images/chapter1/chapter1_slide061_img01.png" alt="파일 쓰기 예시"/><figcaption>파일 쓰기는 분석 결과나 로그를 저장할 때 사용할 수 있습니다.</figcaption></figure><div class="codebox">file = open("memo.txt", "w", encoding="utf-8")
+file.write("파이썬 파일 입출력 연습")
+file.close()</div><div class="summary"><strong>핵심:</strong> 파일을 열었으면 마지막에 <code>close()</code>로 닫아야 합니다.</div></section>
+<section class="card"><h2>4. 텍스트 파일 읽기</h2><p><code>r</code> 모드는 읽기 모드입니다. <code>read()</code>를 사용하면 파일 전체 내용을 문자열로 읽을 수 있습니다.</p><figure><img src="images/chapter1/chapter1_slide062_img01.png" alt="파일 읽기 예시"/><figcaption>읽기 모드에서는 기존 파일의 내용을 불러옵니다.</figcaption></figure><div class="codebox">file = open("memo.txt", "r", encoding="utf-8")
+content = file.read()
+file.close()
+
+print(content)</div></section>
+<section class="card"><h2>5. with 문 사용하기</h2><p><code>with</code> 문을 사용하면 파일을 사용한 뒤 자동으로 닫아줍니다. 실무에서는 <code>open()</code>과 <code>close()</code>를 직접 쓰는 방식보다 <code>with</code> 문을 더 많이 사용합니다.</p><div class="codebox">with open("memo.txt", "r", encoding="utf-8") as file:
+    content = file.read()
+
+print(content)</div><div class="callout"><strong>권장:</strong> 앞으로 파일을 다룰 때는 가능하면 <code>with open(...)</code> 구조를 사용하세요.</div></section>
+<section class="card"><h2>6. 여러 줄 저장하기</h2><p>여러 줄을 저장하려면 줄바꿈 문자 <code>\n</code>을 사용합니다.</p><div class="codebox">lines = ["첫 번째 줄\n", "두 번째 줄\n", "세 번째 줄\n"]
+
+with open("lines.txt", "w", encoding="utf-8") as file:
+    file.writelines(lines)</div><p>여러 줄을 읽을 때는 <code>readlines()</code>를 사용할 수 있습니다.</p><div class="codebox">with open("lines.txt", "r", encoding="utf-8") as file:
+    lines = file.readlines()
+
+print(lines)</div></section>
+<section class="card"><h2>7. glob으로 여러 파일 찾기</h2><p><code>glob</code>은 특정 패턴에 맞는 파일 목록을 찾을 때 사용합니다. 예를 들어 <code>data</code> 폴더 안의 모든 txt 파일을 찾을 수 있습니다.</p><figure><img src="images/chapter1/chapter1_slide063_img01.png" alt="glob 예시"/><figcaption>여러 파일을 한 번에 처리할 때 <code>glob</code>을 사용하면 편리합니다.</figcaption></figure><div class="codebox">import glob
+
+file_list = glob.glob("data/*.txt")
+print(file_list)</div></section>
+<section class="card"><h2>8. 실습 체크리스트</h2><ul><li>파일 경로의 개념을 설명할 수 있다.</li><li>텍스트 파일을 새로 만들고 내용을 저장할 수 있다.</li><li>텍스트 파일을 읽어 화면에 출력할 수 있다.</li><li><code>with open()</code> 구조를 사용할 수 있다.</li><li><code>glob</code>으로 여러 파일 목록을 찾을 수 있다.</li></ul></section>
+<section class="card"><h2>9. 종합 실습 문제</h2><h3>1. 문제 출제</h3><p>오늘 배운 내용을 활용해 간단한 학습 메모 파일을 생성하고 다시 읽어오는 프로그램을 작성해 보세요.</p><ul><li>파일명은 <code>study_memo.txt</code>로 합니다.</li><li>메모 내용은 3줄 이상 저장합니다.</li><li><code>with open()</code>을 사용합니다.</li><li>저장한 파일을 다시 읽어서 화면에 출력합니다.</li></ul><h3>2. 문제 해결에 필요한 개념 요약</h3><table class="table"><thead><tr><th>개념</th><th>활용 방법</th></tr></thead><tbody><tr><td>쓰기 모드</td><td><code>w</code> 모드로 파일을 새로 만듭니다.</td></tr><tr><td>읽기 모드</td><td><code>r</code> 모드로 파일을 읽습니다.</td></tr><tr><td>줄바꿈</td><td><code>\n</code>으로 여러 줄을 표현합니다.</td></tr><tr><td>with 문</td><td>파일을 안전하게 열고 닫습니다.</td></tr></tbody></table><h3>3. 수도코드</h3><div class="codebox">파일 이름을 정한다.
+저장할 메모 내용을 문자열 또는 리스트로 준비한다.
+쓰기 모드로 파일을 연다.
+메모 내용을 파일에 저장한다.
+읽기 모드로 같은 파일을 다시 연다.
+파일 내용을 읽는다.
+읽은 내용을 출력한다.</div><h3>4. 실행 예시</h3><p>예상 출력값은 다음과 같습니다.</p><div class="codebox">오늘 배운 내용
+1. 파일 쓰기
+2. 파일 읽기
+3. with 문 사용하기</div></section>
+<section class="card next"><a href="chapter1.html">← Chapter 1 목록으로</a><a href="chapter1-csv-read-write.html">다음 학습: CSV 파일 읽고 쓰기 →</a></section>
+</main></body></html>
