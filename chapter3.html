@@ -8,59 +8,19 @@
     *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;background:#f5f7fb;color:#1f2937;line-height:1.65} header{padding:56px 24px;background:linear-gradient(135deg,#7c2d12,#f97316);color:#fff} .wrap{width:min(1080px,calc(100% - 40px));margin:0 auto} .badge{display:inline-block;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);font-size:14px;margin-bottom:14px} h1{margin:0;font-size:clamp(30px,5vw,48px);letter-spacing:-.04em;line-height:1.2} header p{max-width:760px;margin:16px 0 0;opacity:.92;font-size:18px}.nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.nav a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.12)} main{padding:36px 0 72px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:0 12px 28px rgba(15,23,42,.05)} h2{margin:0 0 16px;font-size:26px;letter-spacing:-.03em} h3{margin:0 0 10px;color:#c2410c}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px} ul{margin:8px 0 0;padding-left:20px} li{margin:6px 0}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 14px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}.table th{background:#fff7ed;color:#c2410c}.table tr:last-child td{border-bottom:0}.table a{color:#c2410c;font-weight:700;text-decoration:none}.table a:hover{text-decoration:underline}.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.next a{display:inline-block;text-decoration:none;background:#ea580c;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700}
   </style>
 </head>
-<body>
-  <header>
-    <div class="wrap">
-      <div class="badge">Chapter 3 · Day 3</div>
-      <h1>AI·머신러닝 개념과 회귀·분류 모델</h1>
-      <p>AI와 머신러닝의 기본 개념을 이해하고, 회귀와 분류 모델을 통해 학습·예측·평가의 전체 흐름을 실습합니다.</p>
-      <nav class="nav">
-        <a href="index.html">메인</a><a href="chapter1.html">Chapter 1</a><a href="chapter2.html">Chapter 2</a><a href="chapter3.html">Chapter 3</a><a href="chapter4.html">Chapter 4</a>
-      </nav>
-    </div>
-  </header>
-  <main class="wrap">
-    <section class="card">
-      <h2>학습 목표</h2>
-      <div class="grid">
-        <div><h3>머신러닝 개념</h3><p>지도학습, 비지도학습, 강화학습의 차이를 입문자 관점에서 이해합니다.</p></div>
-        <div><h3>회귀 모델 이해</h3><p>연속적인 값을 예측하는 회귀 문제와 오차 해석 방법을 학습합니다.</p></div>
-        <div><h3>분류 모델 이해</h3><p>클래스를 예측하는 분류 문제와 정확도 평가 개념을 학습합니다.</p></div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>강의 구성</h2>
-      <table class="table">
-        <thead><tr><th>목차</th><th>세부 내용</th></tr></thead>
-        <tbody>
-          <tr><td><a href="chapter3-ml-concept.html">머신러닝 개념</a></td><td>머신러닝, 지도학습, 비지도학습, 데이터에서 규칙 찾기</td></tr>
-          <tr><td><a href="chapter3-ml-math.html">머신러닝 수학 직관</a></td><td>벡터, 행렬, 함수, 시그모이드, 소프트맥스 개념을 직관적으로 설명</td></tr>
-          <tr><td><a href="chapter3-regression-concept.html">지도학습: 회귀 개념</a></td><td>입력값과 목표값, 직선 모델, 평균제곱오차, 예측값과 실제값</td></tr>
-          <tr><td><a href="chapter3-regression-practice.html">회귀 모델 실습</a></td><td>선형 회귀, 학습 데이터와 예측 결과 비교, 오차 해석</td></tr>
-          <tr><td><a href="chapter3-model-evaluation.html">모델 평가와 오버피팅</a></td><td>훈련 데이터/테스트 데이터, 오버피팅, 검증 데이터 개념</td></tr>
-          <tr><td><a href="chapter3-classification-concept.html">지도학습: 분류 개념</a></td><td>2클래스 분류, 결정 경계, 확률 기반 예측, 로지스틱 회귀 개념</td></tr>
-          <tr><td><a href="chapter3-classification-practice.html">분류 모델 실습</a></td><td>분류 모델 학습, 예측 결과 확인, 정확도 개념, 결과 해석</td></tr>
-          <tr><td><a href="chapter3-combined-practice.html">회귀·분류 종합 실습</a></td><td>하나의 데이터셋으로 문제 정의, 모델 학습, 평가 결과 정리</td></tr>
-          <tr><td><a href="chapter3-semi-project.html">Chapter 3 세미프로젝트</a></td><td>고객 구매 예측 모델을 만드는 60~90분 머신러닝 프로젝트</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section class="card">
-      <h2>실습 산출물</h2>
-      <ul>
-        <li>회귀 모델 학습 및 예측 노트북</li>
-        <li>분류 모델 학습 및 정확도 평가 결과</li>
-        <li>회귀와 분류 차이를 정리한 학습 메모</li>
-        <li>세미프로젝트 모델 평가 및 해석 리포트</li>
-      </ul>
-    </section>
-
-    <section class="card next">
-      <a href="chapter2.html">← Chapter 2</a>
-      <a href="chapter4.html">Chapter 4로 이동 →</a>
-    </section>
-  </main>
-</body>
-</html>
+<body><header><div class="wrap"><div class="badge">Chapter 3 · Day 3</div><h1>AI·머신러닝 개념과 회귀·분류 모델</h1><p>AI와 머신러닝의 기본 개념을 이해하고, 회귀와 분류 모델을 통해 학습·예측·평가의 전체 흐름을 실습합니다.</p><nav class="nav"><a href="index.html">메인</a><a href="chapter1.html">Chapter 1</a><a href="chapter2.html">Chapter 2</a><a href="chapter3.html">Chapter 3</a><a href="chapter4.html">Chapter 4</a></nav></div></header>
+<main class="wrap"><section class="card"><h2>학습 목표</h2><div class="grid"><div><h3>머신러닝 개념</h3><p>지도학습, 비지도학습, 강화학습의 차이를 입문자 관점에서 이해합니다.</p></div><div><h3>회귀 모델 이해</h3><p>연속적인 값을 예측하는 회귀 문제와 오차 해석 방법을 학습합니다.</p></div><div><h3>분류 모델 이해</h3><p>클래스를 예측하는 분류 문제와 정확도 평가 개념을 학습합니다.</p></div></div></section>
+<section class="card"><h2>강의 구성</h2><table class="table"><thead><tr><th>목차</th><th>세부 내용</th></tr></thead><tbody>
+<tr><td><a href="chapter3-expanded-guide.html">Chapter 3 상세 확장 가이드</a></td><td>문제 정의, X/y 구분, 회귀/분류 해석, 평가 지표, 자주 나는 오류 보강</td></tr>
+<tr><td><a href="chapter3-ml-concept.html">머신러닝 개념</a></td><td>머신러닝, 지도학습, 비지도학습, 데이터에서 규칙 찾기</td></tr>
+<tr><td><a href="chapter3-ml-math.html">머신러닝 수학 직관</a></td><td>벡터, 행렬, 함수, 시그모이드, 소프트맥스 개념을 직관적으로 설명</td></tr>
+<tr><td><a href="chapter3-regression-concept.html">지도학습: 회귀 개념</a></td><td>입력값과 목표값, 직선 모델, 평균제곱오차, 예측값과 실제값</td></tr>
+<tr><td><a href="chapter3-regression-practice.html">회귀 모델 실습</a></td><td>선형 회귀, 학습 데이터와 예측 결과 비교, 오차 해석</td></tr>
+<tr><td><a href="chapter3-model-evaluation.html">모델 평가와 오버피팅</a></td><td>훈련 데이터/테스트 데이터, 오버피팅, 검증 데이터 개념</td></tr>
+<tr><td><a href="chapter3-classification-concept.html">지도학습: 분류 개념</a></td><td>2클래스 분류, 결정 경계, 확률 기반 예측, 로지스틱 회귀 개념</td></tr>
+<tr><td><a href="chapter3-classification-practice.html">분류 모델 실습</a></td><td>분류 모델 학습, 예측 결과 확인, 정확도 개념, 결과 해석</td></tr>
+<tr><td><a href="chapter3-combined-practice.html">회귀·분류 종합 실습</a></td><td>하나의 데이터셋으로 문제 정의, 모델 학습, 평가 결과 정리</td></tr>
+<tr><td><a href="chapter3-semi-project.html">Chapter 3 세미프로젝트</a></td><td>고객 구매 예측 모델을 만드는 60~90분 머신러닝 프로젝트</td></tr>
+</tbody></table></section>
+<section class="card"><h2>실습 산출물</h2><ul><li>회귀 모델 학습 및 예측 노트북</li><li>분류 모델 학습 및 정확도 평가 결과</li><li>회귀와 분류 차이를 정리한 학습 메모</li><li>세미프로젝트 모델 평가 및 해석 리포트</li></ul></section>
+<section class="card next"><a href="chapter2.html">← Chapter 2</a><a href="chapter4.html">Chapter 4로 이동 →</a></section></main></body></html>
