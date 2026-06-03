@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 1-3 파이썬 기본 문법 1</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;background:#f5f7fb;color:#1f2937;line-height:1.75}
+    header{padding:56px 24px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff}
+    .wrap{width:min(1080px,calc(100% - 40px));margin:0 auto}
+    .badge{display:inline-block;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);font-size:14px;margin-bottom:14px}
+    h1{margin:0;font-size:clamp(30px,5vw,48px);letter-spacing:-.04em;line-height:1.2}
+    header p{max-width:820px;margin:16px 0 0;opacity:.94;font-size:18px}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.nav a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.12)}
+    main{padding:36px 0 72px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:28px;margin-bottom:22px;box-shadow:0 12px 28px rgba(15,23,42,.05)}
+    h2{margin:0 0 16px;font-size:28px;letter-spacing:-.03em} h3{margin:24px 0 10px;color:#1e40af;font-size:21px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}.mini{background:#eff6ff;border:1px solid #bfdbfe;border-radius:16px;padding:18px}.mini strong{display:block;color:#1e40af;margin-bottom:6px}
+    figure{margin:22px 0;padding:18px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:16px} figure img{display:block;max-width:100%;height:auto;margin:0 auto;border-radius:10px;background:#fff} figcaption{margin-top:12px;color:#4b5563;font-size:14px;text-align:center}
+    ul,ol{margin:10px 0 0;padding-left:22px} li{margin:7px 0}.callout{background:#fff7ed;border-left:6px solid #f97316;border-radius:14px;padding:18px 20px;margin-top:16px}.summary{background:#ecfdf5;border-left:6px solid #10b981;border-radius:14px;padding:18px 20px;margin-top:16px}
+    .table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 14px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}.table th{background:#eff6ff;color:#1e40af}.table tr:last-child td{border-bottom:0}
+    code{background:#f1f5f9;border-radius:6px;padding:2px 6px;color:#0f172a}.codebox{background:#0f172a;color:#e2e8f0;border-radius:14px;padding:16px 18px;overflow:auto;font-family:Consolas,Monaco,monospace;font-size:15px;line-height:1.6;white-space:pre-wrap;word-break:normal;tab-size:4}
+    .next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.next a{display:inline-block;text-decoration:none;background:#2563eb;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="badge">Chapter 1-3 · 파이썬 기본 문법 1</div>
+      <h1>사칙연산, 변수, 자료형, 문자열, print, list, tuple</h1>
+      <p>파이썬을 처음 배우는 학습자를 위해 계산식 실행부터 변수 저장, 자료형 확인, 문자열 출력, 리스트와 튜플의 기본 구조까지 단계적으로 정리합니다.</p>
+      <nav class="nav">
+        <a href="index.html">메인</a><a href="chapter1.html">Chapter 1</a><a href="chapter1-jupyter.html">이전: 주피터 노트북 기초</a><a href="chapter2.html">Chapter 2</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>1. 이번 단원에서 배우는 것</h2>
+      <p>이 단원은 머신러닝이나 데이터 분석으로 들어가기 전에 반드시 익혀야 하는 파이썬의 기본 문법을 다룹니다. 어려운 개념을 한 번에 외우기보다, 주피터 노트북 셀에 직접 입력하고 결과를 확인하면서 이해하는 것이 좋습니다.</p>
+      <div class="grid">
+        <div class="mini"><strong>계산</strong>파이썬으로 덧셈, 뺄셈, 곱셈, 나눗셈, 제곱을 계산합니다.</div>
+        <div class="mini"><strong>변수</strong>값에 이름을 붙여 저장하고 다시 사용합니다.</div>
+        <div class="mini"><strong>자료형</strong>정수, 실수, 문자열, 리스트, 튜플의 차이를 이해합니다.</div>
+        <div class="mini"><strong>출력</strong><code>print()</code>로 원하는 내용을 화면에 표시합니다.</div>
+      </div>
+      <figure>
+        <img src="images/chapter1/chapter1_slide029_img01.png" alt="파이썬 기본 챕터 표지" />
+        <figcaption>Chapter 02 파이썬 기본: 머신러닝을 이해하는 데 필요한 최소한의 프로그래밍 지식을 학습합니다.</figcaption>
+      </figure>
+    </section>
+
+    <section class="card">
+      <h2>2. 사칙연산</h2>
+      <p>파이썬은 계산기처럼 사용할 수 있습니다. 주피터 노트북 셀에 계산식을 입력하고 실행하면 결과가 바로 표시됩니다. 기본 연산자는 다른 프로그래밍 언어와 비슷합니다.</p>
+      <table class="table">
+        <thead><tr><th>연산</th><th>기호</th><th>예시</th></tr></thead>
+        <tbody>
+          <tr><td>덧셈</td><td><code>+</code></td><td><code>3 + 2</code></td></tr>
+          <tr><td>뺄셈</td><td><code>-</code></td><td><code>3 - 2</code></td></tr>
+          <tr><td>곱셈</td><td><code>*</code></td><td><code>3 * 2</code></td></tr>
+          <tr><td>나눗셈</td><td><code>/</code></td><td><code>3 / 2</code></td></tr>
+          <tr><td>제곱</td><td><code>**</code></td><td><code>2 ** 8</code></td></tr>
+        </tbody>
+      </table>
+      <figure>
+        <img src="images/chapter1/chapter1_slide037_img01.png" alt="사칙연산 예제 1" />
+        <figcaption>사칙연산은 <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> 기호를 사용합니다.</figcaption>
+      </figure>
+      <figure>
+        <img src="images/chapter1/chapter1_slide037_img04.png" alt="제곱 예제" />
+        <figcaption>파이썬에서 제곱은 <code>**</code> 기호를 사용합니다.</figcaption>
+      </figure>
+      <div class="codebox">3 + 2
+3 - 2
+3 * 2
+3 / 2
+2 ** 8</div>
+      <div class="callout"><strong>초보자 주의:</strong> 곱셈은 <code>x</code>가 아니라 별표 <code>*</code>를 사용합니다. 제곱은 <code>^</code>가 아니라 <code>**</code>를 사용합니다.</div>
+    </section>
+
+    <section class="card">
+      <h2>3. 변수</h2>
+      <p>변수는 값을 저장해 두는 이름입니다. 예를 들어 <code>x = 10</code>이라고 쓰면, 앞으로 <code>x</code>라는 이름을 사용할 때 10이라는 값을 다시 꺼내 쓸 수 있습니다.</p>
+      <figure>
+        <img src="images/chapter1/chapter1_slide038_img01.png" alt="변수를 이용한 계산" />
+        <figcaption>변수에 값을 저장하면 같은 값을 여러 번 재사용할 수 있습니다.</figcaption>
+      </figure>
+      <div class="codebox">x = 10
+y = 20
+x + y</div>
+      <h3>변수명 작성 규칙</h3>
+      <ul>
+        <li>알파벳, 숫자, 밑줄(<code>_</code>)을 사용할 수 있습니다.</li>
+        <li>숫자로 시작할 수 없습니다. 예: <code>1data</code>는 잘못된 이름입니다.</li>
+        <li>대문자와 소문자를 구분합니다. <code>data</code>와 <code>Data</code>는 서로 다른 변수입니다.</li>
+        <li>의미 있는 이름을 사용하는 것이 좋습니다. 예: <code>age</code>, <code>price</code>, <code>score</code></li>
+      </ul>
+      <figure>
+        <img src="images/chapter1/chapter1_slide038_img02.png" alt="변수명 표기" />
+        <figcaption>변수명은 나중에 코드를 읽는 사람이 의미를 알 수 있도록 작성하는 것이 좋습니다.</figcaption>
+      </figure>
+    </section>
+
+    <section class="card">
+      <h2>4. 자료형</h2>
+      <p>자료형은 데이터의 종류입니다. 파이썬은 값이 정수인지, 실수인지, 문자열인지에 따라 다르게 처리합니다. 데이터 분석에서는 컬럼의 자료형을 이해하는 것이 매우 중요합니다.</p>
+      <figure>
+        <img src="images/chapter1/chapter1_slide039_img01.png" alt="자료형의 종류" />
+        <figcaption>파이썬에서 자주 사용하는 기본 자료형에는 정수, 실수, 문자열, 리스트, 튜플 등이 있습니다.</figcaption>
+      </figure>
+      <table class="table">
+        <thead><tr><th>자료형</th><th>의미</th><th>예시</th></tr></thead>
+        <tbody>
+          <tr><td><code>int</code></td><td>정수</td><td><code>100</code></td></tr>
+          <tr><td><code>float</code></td><td>실수</td><td><code>100.1</code></td></tr>
+          <tr><td><code>str</code></td><td>문자열</td><td><code>"Python"</code></td></tr>
+          <tr><td><code>list</code></td><td>수정 가능한 여러 값의 묶음</td><td><code>[1, 2, 3]</code></td></tr>
+          <tr><td><code>tuple</code></td><td>수정 불가능한 여러 값의 묶음</td><td><code>(1, 2, 3)</code></td></tr>
+        </tbody>
+      </table>
+      <h3><code>type()</code>으로 자료형 확인하기</h3>
+      <figure>
+        <img src="images/chapter1/chapter1_slide040_img01.png" alt="type 함수로 자료형 확인" />
+        <figcaption><code>type()</code> 함수는 값이나 변수의 자료형을 확인할 때 사용합니다.</figcaption>
+      </figure>
+      <div class="codebox">type(100)
+type(100.1)
+type("Python")</div>
+      <div class="summary"><strong>데이터 분석 연결:</strong> 숫자로 보여도 실제로는 문자열인 경우가 있습니다. 예를 들어 엑셀에서 불러온 금액 데이터가 <code>"1000"</code>처럼 문자열이면 계산 전에 숫자형으로 바꿔야 합니다.</div>
+    </section>
+
+    <section class="card">
+      <h2>5. 문자열</h2>
+      <p>문자열은 문자 데이터를 의미합니다. 파이썬에서는 작은따옴표 또는 큰따옴표로 감싸면 문자열로 인식합니다.</p>
+      <figure>
+        <img src="images/chapter1/chapter1_slide041_img01.png" alt="문자열 예제" />
+        <figcaption>문자열은 <code>'Hello'</code> 또는 <code>"Hello"</code>처럼 따옴표로 감싸서 표현합니다.</figcaption>
+      </figure>
+      <div class="codebox">name = "Python"
+message = '데이터 분석 입문'
+print(name)
+print(message)</div>
+      <div class="callout"><strong>초보자 주의:</strong> 따옴표를 열었으면 반드시 같은 종류의 따옴표로 닫아야 합니다. <code>"Python'</code>처럼 섞어 쓰면 오류가 발생합니다.</div>
+    </section>
+
+    <section class="card">
+      <h2>6. print 문</h2>
+      <p>주피터 노트북에서는 마지막 줄의 값이 자동으로 표시되지만, 여러 값을 원하는 형식으로 출력하려면 <code>print()</code>를 사용하는 것이 좋습니다.</p>
+      <figure>
+        <img src="images/chapter1/chapter1_slide042_img01.png" alt="print 문의 이용" />
+        <figcaption><code>print()</code>는 코드 실행 중 확인하고 싶은 값을 화면에 출력할 때 자주 사용합니다.</figcaption>
+      </figure>
+      <div class="codebox">x = 10
+y = 20
+print(x)
+print(y)
+print(x + y)</div>
+      <h3>문자열과 숫자 함께 출력하기</h3>
+      <figure>
+        <img src="images/chapter1/chapter1_slide043_img01.png" alt="문자열과 수치 함께 표시" />
+        <figcaption>문자열과 숫자를 함께 출력하면 결과를 더 읽기 쉽게 만들 수 있습니다.</figcaption>
+      </figure>
+      <div class="codebox">score = 85
+print("점수는", score, "점입니다.")
+print("점수는 {}점입니다.".format(score))</div>
+      <figure>
+        <img src="images/chapter1/chapter1_slide044_img02.png" alt="format을 이용한 출력" />
+        <figcaption><code>format()</code>을 사용하면 여러 값을 원하는 위치에 넣어 출력할 수 있습니다.</figcaption>
+      </figure>
+    </section>
+
+    <section class="card">
+      <h2>7. list</h2>
+      <p>리스트는 여러 데이터를 하나의 이름으로 묶어 관리할 때 사용합니다. 대괄호 <code>[]</code> 안에 값을 쉼표로 구분해서 넣습니다.</p>
+      <figure>
+        <img src="images/chapter1/chapter1_slide045_img01.png" alt="리스트의 이용" />
+        <figcaption>리스트의 인덱스는 0부터 시작합니다. 첫 번째 값은 <code>x[0]</code>으로 가져옵니다.</figcaption>
+      </figure>
+      <div class="codebox">scores = [80, 90, 75, 100]
+print(scores)
+print(scores[0])
+print(scores[1])</div>
+      <h3>리스트 값 수정하기</h3>
+      <figure>
+        <img src="images/chapter1/chapter1_slide046_img01.png" alt="리스트 자료형과 요소" />
+        <figcaption>리스트 안의 특정 요소는 인덱스를 사용해 수정할 수 있습니다.</figcaption>
+      </figure>
+      <div class="codebox">scores = [80, 90, 75, 100]
+scores[2] = 85
+print(scores)</div>
+      <h3>2차원 리스트</h3>
+      <figure>
+        <img src="images/chapter1/chapter1_slide047_img01.png" alt="2차원 리스트" />
+        <figcaption>2차원 리스트는 리스트 안에 리스트가 들어 있는 구조입니다.</figcaption>
+      </figure>
+      <div class="codebox">table = [[1, 2, 3], [4, 5, 6]]
+print(table[0])
+print(table[0][1])</div>
+      <h3>리스트 길이와 range</h3>
+      <figure>
+        <img src="images/chapter1/chapter1_slide048_img01.png" alt="리스트 길이" />
+        <figcaption><code>len()</code>은 리스트에 값이 몇 개 들어 있는지 확인할 때 사용합니다.</figcaption>
+      </figure>
+      <div class="codebox">numbers = [5, 6, 7, 8, 9]
+print(len(numbers))
+
+seq = list(range(5, 10))
+print(seq)</div>
+    </section>
+
+    <section class="card">
+      <h2>8. tuple</h2>
+      <p>튜플은 리스트와 비슷하게 여러 값을 묶는 자료형입니다. 하지만 리스트와 달리 한 번 만든 후에는 요소를 수정할 수 없습니다. 괄호 <code>()</code>를 사용해 표현합니다.</p>
+      <figure>
+        <img src="images/chapter1/chapter1_slide051_img01.png" alt="튜플의 이용" />
+        <figcaption>튜플은 수정되지 않아야 하는 값의 묶음을 표현할 때 사용할 수 있습니다.</figcaption>
+      </figure>
+      <div class="codebox">point = (10, 20)
+print(point)
+print(point[0])
+print(type(point))</div>
+      <figure>
+        <img src="images/chapter1/chapter1_slide052_img01.png" alt="튜플 요소 참조" />
+        <figcaption>튜플의 요소를 참조할 때도 리스트처럼 대괄호 <code>[]</code>와 인덱스를 사용합니다.</figcaption>
+      </figure>
+      <h3>길이가 1인 튜플</h3>
+      <p>튜플에서 특히 주의할 점은 길이가 1인 튜플입니다. <code>(1)</code>은 튜플이 아니라 숫자 1로 인식됩니다. 길이가 1인 튜플은 <code>(1,)</code>처럼 쉼표를 붙여야 합니다.</p>
+      <figure>
+        <img src="images/chapter1/chapter1_slide053_img01.png" alt="길이가 1인 튜플" />
+        <figcaption>길이가 1인 튜플은 반드시 쉼표를 붙여 <code>(1,)</code> 형태로 작성합니다.</figcaption>
+      </figure>
+      <div class="codebox">a = (1)
+b = (1,)
+print(type(a))
+print(type(b))</div>
+    </section>
+
+    <section class="card">
+      <h2>9. 실습 체크리스트</h2>
+      <ul>
+        <li>파이썬으로 사칙연산과 제곱 계산을 할 수 있다.</li>
+        <li>변수를 만들고 계산에 사용할 수 있다.</li>
+        <li><code>type()</code>으로 자료형을 확인할 수 있다.</li>
+        <li>문자열을 따옴표로 만들고 <code>print()</code>로 출력할 수 있다.</li>
+        <li>리스트를 만들고 인덱스로 값을 가져오거나 수정할 수 있다.</li>
+        <li>튜플과 리스트의 차이를 설명할 수 있다.</li>
+      </ul>
+      <div class="summary"><strong>다음 단계:</strong> 다음 문법 단원에서는 조건문 <code>if</code>, 반복문 <code>for</code>, <code>enumerate</code>, 함수와 초보자 오류 읽기를 다룹니다.</div>
+    </section>
+
+    <section class="card next">
+      <a href="chapter1.html">← Chapter 1 목록으로</a>
+      <a href="chapter1.html">다음 학습: 파이썬 기본 문법 2 →</a>
+    </section>
+  </main>
+</body>
+</html>
