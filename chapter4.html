@@ -8,60 +8,19 @@
     *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;background:#f5f7fb;color:#1f2937;line-height:1.65} header{padding:56px 24px;background:linear-gradient(135deg,#581c87,#a855f7);color:#fff} .wrap{width:min(1080px,calc(100% - 40px));margin:0 auto} .badge{display:inline-block;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);font-size:14px;margin-bottom:14px} h1{margin:0;font-size:clamp(30px,5vw,48px);letter-spacing:-.04em;line-height:1.2} header p{max-width:760px;margin:16px 0 0;opacity:.92;font-size:18px}.nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.nav a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.12)} main{padding:36px 0 72px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:0 12px 28px rgba(15,23,42,.05)} h2{margin:0 0 16px;font-size:26px;letter-spacing:-.03em} h3{margin:0 0 10px;color:#7e22ce}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px} ul{margin:8px 0 0;padding-left:20px} li{margin:6px 0}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 14px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}.table th{background:#faf5ff;color:#7e22ce}.table tr:last-child td{border-bottom:0}.table a{color:#7e22ce;font-weight:700;text-decoration:none}.table a:hover{text-decoration:underline}.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.next a{display:inline-block;text-decoration:none;background:#9333ea;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700}
   </style>
 </head>
-<body>
-  <header>
-    <div class="wrap">
-      <div class="badge">Chapter 4 · Day 4</div>
-      <h1>비지도학습·딥러닝 맛보기와 미니 프로젝트</h1>
-      <p>K-means 클러스터링, 신경망과 딥러닝 개념, MNIST 데모를 가볍게 살펴보고 최종 미니 분석 프로젝트를 완성합니다.</p>
-      <nav class="nav">
-        <a href="index.html">메인</a><a href="chapter1.html">Chapter 1</a><a href="chapter2.html">Chapter 2</a><a href="chapter3.html">Chapter 3</a><a href="chapter4.html">Chapter 4</a>
-      </nav>
-    </div>
-  </header>
-  <main class="wrap">
-    <section class="card">
-      <h2>학습 목표</h2>
-      <div class="grid">
-        <div><h3>비지도학습 맛보기</h3><p>정답 데이터 없이 비슷한 데이터끼리 묶는 클러스터링 개념을 이해합니다.</p></div>
-        <div><h3>딥러닝 개념 이해</h3><p>뉴런, 신경망, 딥러닝의 관계를 개념 중심으로 살펴봅니다.</p></div>
-        <div><h3>미니 프로젝트 완성</h3><p>전처리, 시각화, 모델 학습, 결과 해석을 하나의 흐름으로 정리합니다.</p></div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>강의 구성</h2>
-      <table class="table">
-        <thead><tr><th>목차</th><th>세부 내용</th></tr></thead>
-        <tbody>
-          <tr><td><a href="chapter4-unsupervised.html">비지도학습 맛보기</a></td><td>비지도학습 개념, 클러스터링, K-means, 데이터 군집 이해</td></tr>
-          <tr><td><a href="chapter4-deep-learning-concept.html">딥러닝 개념</a></td><td>뉴런, 신경망, 피드포워드 네트워크, 케라스 기반 모델 흐름</td></tr>
-          <tr><td><a href="chapter4-deep-learning-demo.html">딥러닝 응용 데모</a></td><td>MNIST, ReLU, CNN, 풀링, 드롭아웃 개념을 데모 중심으로 소개</td></tr>
-          <tr><td><a href="chapter4-database-intro.html">데이터베이스 맛보기</a></td><td>sqlite3, MySQL 개념, DB에서 데이터 가져오기, SQL 후속 과정 연결</td></tr>
-          <tr><td><a href="chapter4-project-planning.html">미니 프로젝트 1</a></td><td>문제 정의, 데이터 선정, 분석 목표 설정, 컬럼 의미 파악</td></tr>
-          <tr><td><a href="chapter4-project-preprocessing.html">미니 프로젝트 2</a></td><td>데이터 불러오기, 결측치/이상치 확인, 필터링, 그룹화, 시각화</td></tr>
-          <tr><td><a href="chapter4-project-modeling.html">미니 프로젝트 3</a></td><td>회귀/분류 모델 중 하나 선택, 학습/예측, 정확도 또는 오차 해석</td></tr>
-          <tr><td><a href="chapter4-roadmap.html">결과 발표와 후속 로드맵</a></td><td>분석 결과 정리, 그래프와 모델 결과 설명, SQL/RPA/대시보드/AI Agent 연결</td></tr>
-          <tr><td><a href="chapter4-final-project.html">Chapter 4 최종 미니 프로젝트</a></td><td>4일 과정 전체 내용을 종합한 60~90분 고객 행동 데이터 분석과 예측 리포트</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section class="card">
-      <h2>최종 산출물</h2>
-      <ul>
-        <li>하나의 데이터셋을 활용한 미니 분석 프로젝트</li>
-        <li>전처리 결과와 시각화 그래프</li>
-        <li>회귀 또는 분류 모델 학습 결과</li>
-        <li>분석 결과 해석과 후속 개선 아이디어</li>
-        <li>최종 미니 프로젝트 노트북 및 발표 요약</li>
-      </ul>
-    </section>
-
-    <section class="card next">
-      <a href="chapter3.html">← Chapter 3</a>
-      <a href="index.html">메인으로 이동 →</a>
-    </section>
-  </main>
-</body>
-</html>
+<body><header><div class="wrap"><div class="badge">Chapter 4 · Day 4</div><h1>비지도학습·딥러닝 맛보기와 미니 프로젝트</h1><p>K-means 클러스터링, 신경망과 딥러닝 개념, MNIST 데모를 가볍게 살펴보고 최종 미니 분석 프로젝트를 완성합니다.</p><nav class="nav"><a href="index.html">메인</a><a href="chapter1.html">Chapter 1</a><a href="chapter2.html">Chapter 2</a><a href="chapter3.html">Chapter 3</a><a href="chapter4.html">Chapter 4</a></nav></div></header>
+<main class="wrap"><section class="card"><h2>학습 목표</h2><div class="grid"><div><h3>비지도학습 맛보기</h3><p>정답 데이터 없이 비슷한 데이터끼리 묶는 클러스터링 개념을 이해합니다.</p></div><div><h3>딥러닝 개념 이해</h3><p>뉴런, 신경망, 딥러닝의 관계를 개념 중심으로 살펴봅니다.</p></div><div><h3>미니 프로젝트 완성</h3><p>전처리, 시각화, 모델 학습, 결과 해석을 하나의 흐름으로 정리합니다.</p></div></div></section>
+<section class="card"><h2>강의 구성</h2><table class="table"><thead><tr><th>목차</th><th>세부 내용</th></tr></thead><tbody>
+<tr><td><a href="chapter4-expanded-guide.html">Chapter 4 상세 확장 가이드</a></td><td>비지도학습·딥러닝·DB·최종 프로젝트 해석과 발표 전략 보강</td></tr>
+<tr><td><a href="chapter4-unsupervised.html">비지도학습 맛보기</a></td><td>비지도학습 개념, 클러스터링, K-means, 데이터 군집 이해</td></tr>
+<tr><td><a href="chapter4-deep-learning-concept.html">딥러닝 개념</a></td><td>뉴런, 신경망, 피드포워드 네트워크, 케라스 기반 모델 흐름</td></tr>
+<tr><td><a href="chapter4-deep-learning-demo.html">딥러닝 응용 데모</a></td><td>MNIST, ReLU, CNN, 풀링, 드롭아웃 개념을 데모 중심으로 소개</td></tr>
+<tr><td><a href="chapter4-database-intro.html">데이터베이스 맛보기</a></td><td>sqlite3, MySQL 개념, DB에서 데이터 가져오기, SQL 후속 과정 연결</td></tr>
+<tr><td><a href="chapter4-project-planning.html">미니 프로젝트 1</a></td><td>문제 정의, 데이터 선정, 분석 목표 설정, 컬럼 의미 파악</td></tr>
+<tr><td><a href="chapter4-project-preprocessing.html">미니 프로젝트 2</a></td><td>데이터 불러오기, 결측치/이상치 확인, 필터링, 그룹화, 시각화</td></tr>
+<tr><td><a href="chapter4-project-modeling.html">미니 프로젝트 3</a></td><td>회귀/분류 모델 중 하나 선택, 학습/예측, 정확도 또는 오차 해석</td></tr>
+<tr><td><a href="chapter4-roadmap.html">결과 발표와 후속 로드맵</a></td><td>분석 결과 정리, 그래프와 모델 결과 설명, SQL/RPA/대시보드/AI Agent 연결</td></tr>
+<tr><td><a href="chapter4-final-project.html">Chapter 4 최종 미니 프로젝트</a></td><td>4일 과정 전체 내용을 종합한 60~90분 고객 행동 데이터 분석과 예측 리포트</td></tr>
+</tbody></table></section>
+<section class="card"><h2>최종 산출물</h2><ul><li>하나의 데이터셋을 활용한 미니 분석 프로젝트</li><li>전처리 결과와 시각화 그래프</li><li>회귀 또는 분류 모델 학습 결과</li><li>분석 결과 해석과 후속 개선 아이디어</li><li>최종 미니 프로젝트 노트북 및 발표 요약</li></ul></section>
+<section class="card next"><a href="chapter3.html">← Chapter 3</a><a href="index.html">메인으로 이동 →</a></section></main></body></html>
