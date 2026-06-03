@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 1 세미프로젝트 - CSV 기반 판매 데이터 분석</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;background:#f5f7fb;color:#1f2937;line-height:1.75}header{padding:56px 24px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff}.wrap{width:min(1080px,calc(100% - 40px));margin:0 auto}.badge{display:inline-block;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);font-size:14px;margin-bottom:14px}h1{margin:0;font-size:clamp(30px,5vw,48px);letter-spacing:-.04em;line-height:1.2}header p{max-width:860px;margin:16px 0 0;opacity:.94;font-size:18px}.nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.nav a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.12)}main{padding:36px 0 72px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:28px;margin-bottom:22px;box-shadow:0 12px 28px rgba(15,23,42,.05)}h2{margin:0 0 16px;font-size:28px;letter-spacing:-.03em}h3{margin:24px 0 10px;color:#1e40af;font-size:21px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}.mini{background:#eff6ff;border:1px solid #bfdbfe;border-radius:16px;padding:18px}.mini strong{display:block;color:#1e40af;margin-bottom:6px}ul,ol{margin:10px 0 0;padding-left:22px}li{margin:7px 0}.callout{background:#fff7ed;border-left:6px solid #f97316;border-radius:14px;padding:18px 20px;margin-top:16px}.summary{background:#ecfdf5;border-left:6px solid #10b981;border-radius:14px;padding:18px 20px;margin-top:16px}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 14px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}.table th{background:#eff6ff;color:#1e40af}.table tr:last-child td{border-bottom:0}code{background:#f1f5f9;border-radius:6px;padding:2px 6px;color:#0f172a}.codebox{background:#0f172a;color:#e2e8f0;border-radius:14px;padding:16px 18px;overflow:auto;font-family:Consolas,Monaco,monospace;font-size:15px;line-height:1.6;white-space:pre-wrap;word-break:normal;tab-size:4}.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.next a{display:inline-block;text-decoration:none;background:#2563eb;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700}.step{border-left:5px solid #2563eb;padding-left:16px;margin-top:18px}.muted{color:#6b7280}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="badge">Chapter 1 · 세미프로젝트 · 60~90분</div>
+      <h1>CSV 기반 판매 데이터 분석 미니 리포트 만들기</h1>
+      <p>Chapter 1에서 배운 파이썬 기본 문법, 조건문, 반복문, 함수, NumPy, 파일 입출력, CSV 읽기/쓰기, 필터링을 종합하여 작은 분석 프로젝트를 완성합니다.</p>
+      <nav class="nav"><a href="index.html">메인</a><a href="chapter1.html">Chapter 1</a><a href="chapter1-csv-practice.html">이전: CSV 실습</a><a href="chapter2.html">Chapter 2</a></nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>1. 프로젝트 목표</h2>
+      <p>카페의 일일 판매 데이터를 CSV 파일로 만들고, 파이썬으로 읽어온 뒤 매출을 계산하고, 조건에 맞는 데이터를 추출하여 결과 파일과 간단한 텍스트 리포트를 생성합니다.</p>
+      <div class="grid">
+        <div class="mini"><strong>난이도</strong>각 단원 실습보다 한 단계 높음</div>
+        <div class="mini"><strong>예상 소요 시간</strong>60~90분</div>
+        <div class="mini"><strong>최종 산출물</strong>분석 CSV 1개 + 텍스트 리포트 1개</div>
+        <div class="mini"><strong>핵심 역량</strong>문제 분해, 단계별 구현, 결과 검증</div>
+      </div>
+      <div class="callout"><strong>진행 원칙:</strong> 정답 코드를 한 번에 작성하려 하지 말고, “데이터 준비 → 계산 → 필터링 → 저장 → 리포트 작성” 순서로 작게 나누어 해결합니다.</div>
+    </section>
+
+    <section class="card">
+      <h2>2. 문제 출제</h2>
+      <p>아래 판매 데이터를 사용해 <strong>카페 일일 매출 분석 프로그램</strong>을 작성하세요.</p>
+      <p>입력 데이터는 <code>cafe_sales.csv</code> 파일로 저장한다고 가정합니다.</p>
+      <div class="codebox">date,menu,category,price,count
+2026-06-08,아메리카노,coffee,4500,12
+2026-06-08,카페라떼,coffee,5000,8
+2026-06-08,바닐라라떼,coffee,5500,6
+2026-06-08,레몬에이드,ade,6000,5
+2026-06-08,샌드위치,food,6500,4
+2026-06-08,쿠키,food,3000,10</div>
+      <p>프로그램은 다음 요구사항을 만족해야 합니다.</p>
+      <ul>
+        <li>CSV 파일을 읽어옵니다.</li>
+        <li><code>sales</code> 컬럼을 새로 만들고 <code>price × count</code> 값을 저장합니다.</li>
+        <li>전체 매출, 평균 메뉴 매출, 최고 매출 메뉴를 계산합니다.</li>
+        <li>매출이 40,000원 이상인 메뉴만 추출합니다.</li>
+        <li>분석 결과를 <code>cafe_sales_result.csv</code>로 저장합니다.</li>
+        <li>요약 문장을 <code>cafe_sales_report.txt</code>로 저장합니다.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>3. 활용 개념 정리</h2>
+      <table class="table">
+        <thead><tr><th>사용 개념</th><th>프로젝트에서 활용하는 방법</th></tr></thead>
+        <tbody>
+          <tr><td>변수와 문자열</td><td>파일명, 리포트 문장, 기준 금액을 저장합니다.</td></tr>
+          <tr><td>리스트와 튜플</td><td>메뉴명, 컬럼명, 출력 항목을 묶어서 관리합니다.</td></tr>
+          <tr><td>조건문</td><td>매출 기준을 만족하는지 판단합니다.</td></tr>
+          <tr><td>반복문</td><td>여러 메뉴를 차례대로 확인하거나 출력합니다.</td></tr>
+          <tr><td>함수</td><td>매출 계산, 리포트 문장 생성 같은 반복 가능한 작업을 묶습니다.</td></tr>
+          <tr><td>NumPy</td><td>매출 배열의 합계, 평균, 최댓값을 계산합니다.</td></tr>
+          <tr><td>파일 입출력</td><td>텍스트 리포트를 파일로 저장합니다.</td></tr>
+          <tr><td>CSV 처리</td><td>원본 데이터를 읽고 분석 결과를 새 CSV로 저장합니다.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>4. 단계별 해결 전략</h2>
+      <div class="step"><h3>Step 1. 문제를 작은 작업으로 나누기</h3><p>처음부터 전체 프로그램을 만들지 말고, 아래 순서로 작업을 나눕니다.</p><ol><li>CSV 파일 준비</li><li>CSV 파일 읽기</li><li>매출 컬럼 추가</li><li>요약 지표 계산</li><li>조건 필터링</li><li>결과 CSV 저장</li><li>텍스트 리포트 저장</li></ol></div>
+      <div class="step"><h3>Step 2. 입력 데이터 구조 확인하기</h3><p>파일을 읽은 뒤 행 개수, 컬럼명, 앞부분 데이터를 확인합니다.</p><div class="codebox"># TODO: pandas로 CSV 파일을 읽으세요.
+# TODO: head(), shape, columns로 데이터 구조를 확인하세요.</div></div>
+      <div class="step"><h3>Step 3. 매출 계산하기</h3><p>가격과 판매 수량을 곱해 <code>sales</code> 컬럼을 만듭니다.</p><div class="codebox"># TODO: sales 컬럼을 추가하세요.
+# 힌트: price 컬럼과 count 컬럼을 곱합니다.</div></div>
+      <div class="step"><h3>Step 4. NumPy로 요약 지표 계산하기</h3><p>매출 컬럼을 NumPy 배열로 바꾼 뒤 합계, 평균, 최댓값을 구합니다.</p><div class="codebox"># TODO: sales 컬럼을 NumPy 배열로 변환하세요.
+# TODO: 전체 매출, 평균 매출, 최고 매출을 계산하세요.</div></div>
+      <div class="step"><h3>Step 5. 조건 필터링하기</h3><p>매출이 40,000원 이상인 메뉴만 추출합니다.</p><div class="codebox"># TODO: sales가 40000 이상인 행만 선택하세요.
+# TODO: 선택된 결과를 화면에 출력하세요.</div></div>
+      <div class="step"><h3>Step 6. 결과 저장하기</h3><p>분석 결과 CSV와 텍스트 리포트를 각각 저장합니다.</p><div class="codebox"># TODO: 결과 DataFrame을 cafe_sales_result.csv로 저장하세요.
+# TODO: 요약 문장을 cafe_sales_report.txt로 저장하세요.</div></div>
+    </section>
+
+    <section class="card">
+      <h2>5. 수도코드</h2>
+      <div class="codebox">필요한 라이브러리를 불러온다.
+원본 CSV 파일명을 변수에 저장한다.
+결과 CSV 파일명과 리포트 파일명을 변수에 저장한다.
+
+CSV 파일을 읽어 DataFrame으로 저장한다.
+데이터의 앞부분과 컬럼을 확인한다.
+
+sales 컬럼을 새로 만든다.
+sales = price * count로 계산한다.
+
+sales 컬럼을 NumPy 배열로 변환한다.
+전체 매출을 계산한다.
+평균 메뉴 매출을 계산한다.
+최고 매출 금액을 계산한다.
+최고 매출 메뉴를 찾는다.
+
+sales가 40000 이상인 행만 선택한다.
+선택 결과를 새 CSV 파일로 저장한다.
+
+요약 리포트 문장을 만든다.
+텍스트 파일을 열고 리포트 문장을 저장한다.
+
+저장 완료 메시지를 출력한다.</div>
+    </section>
+
+    <section class="card">
+      <h2>6. 실행 예시</h2>
+      <h3>예상 출력 예시</h3>
+      <div class="codebox">전체 매출: 235000원
+평균 메뉴 매출: 39166.67원
+최고 매출 메뉴: 아메리카노
+최고 매출 금액: 54000원
+
+[매출 40000원 이상 메뉴]
+아메리카노 54000원
+카페라떼 40000원
+바닐라라떼 33000원  # 이 항목은 기준 미달이므로 실제 결과에는 포함되면 안 됩니다.</div>
+      <div class="callout"><strong>검증 포인트:</strong> 위 출력 예시에는 일부러 확인용 함정이 들어 있습니다. 바닐라라떼 매출은 33,000원이므로 “40,000원 이상 메뉴” 결과에 포함되면 안 됩니다. 결과를 그대로 믿지 말고 기준 조건을 직접 검증하세요.</div>
+      <h3>최종 저장 파일</h3>
+      <ul>
+        <li><code>cafe_sales_result.csv</code>: 매출 40,000원 이상 메뉴 목록</li>
+        <li><code>cafe_sales_report.txt</code>: 전체 매출, 평균 매출, 최고 매출 메뉴 요약</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>7. 제출 기준</h2>
+      <ul>
+        <li>노트북 파일명: <code>chapter1_semiproject_이름.ipynb</code></li>
+        <li>원본 CSV 생성 또는 준비 코드 포함</li>
+        <li>각 단계별 마크다운 설명 포함</li>
+        <li>최종 결과 CSV와 텍스트 리포트 생성 확인</li>
+        <li>마지막 셀에 “이번 프로젝트에서 배운 점 3가지” 작성</li>
+      </ul>
+      <div class="summary"><strong>학습 목표:</strong> 이 프로젝트는 코드를 외우는 과제가 아니라, 문제를 단계별로 나누고 각 단계의 결과를 확인하면서 완성하는 연습입니다.</div>
+    </section>
+
+    <section class="card next"><a href="chapter1.html">← Chapter 1 목록으로</a><a href="chapter2.html">Chapter 2로 이동 →</a></section>
+  </main>
+</body>
+</html>
