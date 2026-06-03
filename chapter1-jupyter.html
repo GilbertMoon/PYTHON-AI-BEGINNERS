@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chapter 1-2 주피터 노트북 기초</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;background:#f5f7fb;color:#1f2937;line-height:1.75}
+    header{padding:56px 24px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff}
+    .wrap{width:min(1080px,calc(100% - 40px));margin:0 auto}
+    .badge{display:inline-block;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);font-size:14px;margin-bottom:14px}
+    h1{margin:0;font-size:clamp(30px,5vw,48px);letter-spacing:-.04em;line-height:1.2}
+    header p{max-width:820px;margin:16px 0 0;opacity:.94;font-size:18px}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.nav a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.12)}
+    main{padding:36px 0 72px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:28px;margin-bottom:22px;box-shadow:0 12px 28px rgba(15,23,42,.05)}
+    h2{margin:0 0 16px;font-size:28px;letter-spacing:-.03em} h3{margin:24px 0 10px;color:#1e40af;font-size:21px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}.mini{background:#eff6ff;border:1px solid #bfdbfe;border-radius:16px;padding:18px}.mini strong{display:block;color:#1e40af;margin-bottom:6px}
+    figure{margin:22px 0;padding:18px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:16px} figure img{display:block;max-width:100%;height:auto;margin:0 auto;border-radius:10px;background:#fff} figcaption{margin-top:12px;color:#4b5563;font-size:14px;text-align:center}
+    ul,ol{margin:10px 0 0;padding-left:22px} li{margin:7px 0}.callout{background:#fff7ed;border-left:6px solid #f97316;border-radius:14px;padding:18px 20px;margin-top:16px}.summary{background:#ecfdf5;border-left:6px solid #10b981;border-radius:14px;padding:18px 20px;margin-top:16px}
+    .table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 14px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}.table th{background:#eff6ff;color:#1e40af}.table tr:last-child td{border-bottom:0}
+    code{background:#f1f5f9;border-radius:6px;padding:2px 6px;color:#0f172a}.codebox{background:#0f172a;color:#e2e8f0;border-radius:14px;padding:16px 18px;overflow:auto;font-family:Consolas,Monaco,monospace;font-size:15px;line-height:1.6}
+    .next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.next a{display:inline-block;text-decoration:none;background:#2563eb;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="badge">Chapter 1-2 · 주피터 노트북 기초</div>
+      <h1>주피터 노트북에서 코드와 설명을 함께 작성하기</h1>
+      <p>주피터 노트북은 파이썬 코드를 한 줄씩 실행하고 결과를 바로 확인할 수 있는 실습 도구입니다. 데이터 분석 수업에서는 코드, 실행 결과, 설명 메모를 하나의 파일에 함께 정리하는 데 사용합니다.</p>
+      <nav class="nav">
+        <a href="index.html">메인</a><a href="chapter1.html">Chapter 1</a><a href="chapter1-orientation.html">이전: 과정 오리엔테이션</a><a href="chapter2.html">Chapter 2</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>1. 주피터 노트북이란?</h2>
+      <p>일반적인 파이썬 파일은 위에서 아래로 한 번에 실행되는 경우가 많습니다. 반면 주피터 노트북은 코드를 작은 단위인 <strong>셀(Cell)</strong>로 나누어 실행합니다. 그래서 초보자가 중간 결과를 확인하면서 학습하기 좋습니다.</p>
+      <div class="grid">
+        <div class="mini"><strong>코드 실행</strong>한 줄 또는 몇 줄의 파이썬 코드를 셀 단위로 실행합니다.</div>
+        <div class="mini"><strong>결과 확인</strong>계산 결과, 표, 그래프가 셀 바로 아래에 표시됩니다.</div>
+        <div class="mini"><strong>설명 작성</strong>마크다운 셀을 사용해 수업 메모와 해석을 함께 남깁니다.</div>
+      </div>
+      <div class="callout"><strong>초보자 관점 핵심:</strong> 주피터 노트북은 “코드를 작성하는 문서”입니다. 코드만 저장하는 것이 아니라, 왜 이 코드를 실행했는지와 결과가 무슨 뜻인지까지 함께 정리할 수 있습니다.</div>
+    </section>
+
+    <section class="card">
+      <h2>2. 주피터 노트북 실행하기</h2>
+      <p>PPT에서는 시작 메뉴의 Anaconda3 폴더에서 <strong>Jupyter Notebook</strong>을 실행하는 방법을 안내합니다. 실행하면 웹 브라우저가 열리고, 현재 작업 폴더의 파일 목록이 표시됩니다.</p>
+      <figure>
+        <img src="images/chapter1/chapter1_slide020_img01.png" alt="주피터 노트북 실행 화면" />
+        <figcaption>주피터 노트북은 브라우저에서 실행되지만, 실제 코드는 내 PC의 파이썬 환경에서 실행됩니다.</figcaption>
+      </figure>
+      <h3>수업에서 권장하는 실행 흐름</h3>
+      <ol>
+        <li>수업용 프로젝트 폴더를 엽니다.</li>
+        <li>가상환경 또는 Anaconda 환경이 활성화되어 있는지 확인합니다.</li>
+        <li>터미널에서 <code>jupyter notebook</code> 또는 <code>jupyter lab</code>을 실행합니다.</li>
+        <li>브라우저에서 실습 노트북 파일을 열어 코드를 실행합니다.</li>
+      </ol>
+      <div class="codebox">jupyter notebook
+# 또는
+jupyter lab</div>
+    </section>
+
+    <section class="card">
+      <h2>3. 새 노트북 만들기와 셀 이해하기</h2>
+      <p>작업할 폴더에 들어간 뒤 <strong>New → Python 3</strong>를 선택하면 새 노트북이 생성됩니다. 새로 열린 화면에서 파란색 또는 초록색 테두리가 있는 입력 공간이 보이는데, 이 공간을 <strong>셀</strong>이라고 부릅니다.</p>
+      <figure>
+        <img src="images/chapter1/chapter1_slide021_img01.png" alt="주피터 노트북 셀 화면" />
+        <figcaption>셀은 파이썬 코드를 작성하고 실행하는 기본 단위입니다.</figcaption>
+      </figure>
+      <figure>
+        <img src="images/chapter1/chapter1_slide021_img02.png" alt="주피터 노트북으로 파이썬 실행" />
+        <figcaption>셀에 코드를 입력한 뒤 실행하면 결과가 바로 아래에 표시됩니다.</figcaption>
+      </figure>
+      <h3>셀을 이해하는 쉬운 비유</h3>
+      <p>셀 하나는 작은 실험 공간입니다. 첫 번째 셀에서는 데이터를 불러오고, 두 번째 셀에서는 데이터를 확인하고, 세 번째 셀에서는 그래프를 그리는 식으로 작업을 나눌 수 있습니다.</p>
+    </section>
+
+    <section class="card">
+      <h2>4. 코드 실행하기</h2>
+      <p>PPT에서는 셀에 <code>1 / 3</code>을 입력하고 <strong>Run</strong> 버튼을 클릭하여 결과를 확인하는 예시를 보여줍니다. 실행 결과는 셀 바로 아래에 표시되고, 다음 셀이 자동으로 추가될 수 있습니다.</p>
+      <figure>
+        <img src="images/chapter1/chapter1_slide022_img01.png" alt="첫 번째 계산 결과" />
+        <figcaption>셀을 실행하면 계산 결과가 바로 아래에 나타납니다.</figcaption>
+      </figure>
+      <figure>
+        <img src="images/chapter1/chapter1_slide022_img02.png" alt="두 번째 계산 결과" />
+        <figcaption>다음 셀에 새로운 코드를 입력하고 계속 실행할 수 있습니다.</figcaption>
+      </figure>
+      <div class="codebox">1 / 3
+
+2 + 3
+
+print("Hello, Python")</div>
+      <div class="summary"><strong>자주 쓰는 실행 단축키:</strong> <code>Shift + Enter</code>는 현재 셀을 실행하고 다음 셀로 이동합니다. <code>Ctrl + Enter</code>는 현재 셀만 실행합니다.</div>
+    </section>
+
+    <section class="card">
+      <h2>5. 하나의 셀에 여러 명령문 작성하기</h2>
+      <p>하나의 셀에는 여러 줄의 코드를 작성할 수 있습니다. 데이터 분석에서는 관련 있는 작업을 한 셀에 묶어두면 흐름을 이해하기 쉽습니다.</p>
+      <figure>
+        <img src="images/chapter1/chapter1_slide023_img01.png" alt="하나의 셀에 여러 명령문 작성" />
+        <figcaption>관련 있는 명령문은 하나의 셀에 함께 작성할 수 있습니다.</figcaption>
+      </figure>
+      <div class="codebox">x = 10
+y = 20
+result = x + y
+print(result)</div>
+      <p>다만 너무 많은 코드를 한 셀에 몰아넣으면 디버깅하기 어렵습니다. 초보자 단계에서는 <strong>하나의 셀에는 하나의 작은 목적</strong>만 담는 습관이 좋습니다.</p>
+    </section>
+
+    <section class="card">
+      <h2>6. 명령 모드와 편집 모드</h2>
+      <p>주피터 노트북의 셀에는 두 가지 상태가 있습니다. <strong>편집 모드</strong>는 셀 안에 코드를 입력하는 상태이고, <strong>명령 모드</strong>는 셀 자체를 추가, 삭제, 복사하는 상태입니다.</p>
+      <table class="table">
+        <thead><tr><th>모드</th><th>의미</th><th>초보자 체크 포인트</th></tr></thead>
+        <tbody>
+          <tr><td>편집 모드</td><td>셀 안에 코드를 직접 입력하는 상태</td><td>셀 안에 커서가 깜빡이면 편집 모드입니다.</td></tr>
+          <tr><td>명령 모드</td><td>셀을 추가, 삭제, 이동하는 상태</td><td>셀 테두리가 선택된 느낌이면 명령 모드입니다.</td></tr>
+        </tbody>
+      </table>
+      <figure>
+        <img src="images/chapter1/chapter1_slide024_img01.png" alt="주피터 노트북 명령 모드와 편집 모드" />
+        <figcaption>명령 모드와 편집 모드를 구분하면 셀 조작이 훨씬 쉬워집니다.</figcaption>
+      </figure>
+      <ul>
+        <li><code>Enter</code>: 선택된 셀을 편집 모드로 전환합니다.</li>
+        <li><code>Esc</code>: 편집 모드에서 명령 모드로 빠져나옵니다.</li>
+        <li><code>A</code>: 명령 모드에서 현재 셀 위에 새 셀을 추가합니다.</li>
+        <li><code>B</code>: 명령 모드에서 현재 셀 아래에 새 셀을 추가합니다.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>7. 마크다운 셀로 설명 쓰기</h2>
+      <p>주피터 노트북은 코드뿐 아니라 설명 문장도 함께 작성할 수 있습니다. 우측 상단 드롭다운에서 <strong>Code → Markdown</strong>으로 바꾸면, 셀에 일반 문장과 제목을 입력할 수 있습니다.</p>
+      <figure>
+        <img src="images/chapter1/chapter1_slide026_img01.png" alt="마크다운 셀 선택" />
+        <figcaption>마크다운 셀은 코드 설명, 분석 메모, 결과 해석을 적는 데 사용합니다.</figcaption>
+      </figure>
+      <div class="codebox"># 머신러닝을 시작합시다
+
+## 오늘 배운 내용
+- 주피터 노트북 실행
+- 코드 셀 실행
+- 마크다운 셀 작성</div>
+      <figure>
+        <img src="images/chapter1/chapter1_slide027_img01.png" alt="마크다운 제목 작성 예시" />
+        <figcaption><code>#</code>, <code>##</code>, <code>###</code> 기호로 제목 크기를 조절할 수 있습니다.</figcaption>
+      </figure>
+      <figure>
+        <img src="images/chapter1/chapter1_slide027_img02.png" alt="마크다운 실행 결과" />
+        <figcaption>마크다운 셀을 실행하면 문서처럼 보기 좋게 표시됩니다.</figcaption>
+      </figure>
+    </section>
+
+    <section class="card">
+      <h2>8. 파일명 변경과 저장</h2>
+      <p>새 노트북의 기본 파일명은 보통 <strong>Untitled</strong>입니다. 파일명을 클릭하여 수업 내용에 맞는 이름으로 바꾸고 저장 버튼을 눌러 보관합니다.</p>
+      <figure>
+        <img src="images/chapter1/chapter1_slide028_img01.png" alt="노트북 파일명 변경과 저장" />
+        <figcaption>파일명은 나중에 다시 찾기 쉽도록 날짜, 주제, 실습명을 포함해 작성하는 것이 좋습니다.</figcaption>
+      </figure>
+      <h3>권장 파일명 예시</h3>
+      <ul>
+        <li><code>day1_jupyter_basic.ipynb</code></li>
+        <li><code>day1_python_variable_practice.ipynb</code></li>
+        <li><code>day1_csv_read_write.ipynb</code></li>
+      </ul>
+      <div class="callout"><strong>주의:</strong> 노트북 파일 확장자는 <code>.ipynb</code>입니다. 이 파일에는 코드, 실행 결과, 마크다운 설명이 함께 저장됩니다.</div>
+    </section>
+
+    <section class="card">
+      <h2>9. 실습 체크리스트</h2>
+      <ul>
+        <li>주피터 노트북을 실행할 수 있다.</li>
+        <li>새 Python 노트북을 만들 수 있다.</li>
+        <li>코드 셀에 간단한 계산식을 입력하고 실행할 수 있다.</li>
+        <li>명령 모드와 편집 모드를 구분할 수 있다.</li>
+        <li>마크다운 셀에 제목과 설명을 작성할 수 있다.</li>
+        <li>노트북 파일명을 바꾸고 저장할 수 있다.</li>
+      </ul>
+    </section>
+
+    <section class="card next">
+      <a href="chapter1.html">← Chapter 1 목록으로</a>
+      <a href="chapter1.html">다음 학습: 파이썬 기본 문법 1 →</a>
+    </section>
+  </main>
+</body>
+</html>
