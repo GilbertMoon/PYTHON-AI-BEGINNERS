@@ -1,0 +1,30 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter 3 세미프로젝트</title><style>*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;background:#f5f7fb;color:#1f2937;line-height:1.75}header{padding:56px 24px;background:linear-gradient(135deg,#7c2d12,#f97316);color:#fff}.wrap{width:min(1080px,calc(100% - 40px));margin:0 auto}.badge{display:inline-block;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);font-size:14px;margin-bottom:14px}h1{margin:0;font-size:clamp(30px,5vw,48px);letter-spacing:-.04em;line-height:1.2}header p{max-width:860px;margin:16px 0 0;opacity:.94;font-size:18px}.nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.nav a{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.12)}main{padding:36px 0 72px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:28px;margin-bottom:22px;box-shadow:0 12px 28px rgba(15,23,42,.05)}h2{margin:0 0 16px;font-size:28px}h3{margin:24px 0 10px;color:#c2410c;font-size:21px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}.mini{background:#fff7ed;border:1px solid #fed7aa;border-radius:16px;padding:18px}.mini strong{display:block;color:#c2410c;margin-bottom:6px}ul,ol{margin:10px 0 0;padding-left:22px}li{margin:7px 0}.callout{background:#fff7ed;border-left:6px solid #f97316;border-radius:14px;padding:18px 20px;margin-top:16px}.summary{background:#ecfdf5;border-left:6px solid #10b981;border-radius:14px;padding:18px 20px;margin-top:16px}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 14px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}.table th{background:#fff7ed;color:#c2410c}code{background:#f1f5f9;border-radius:6px;padding:2px 6px;color:#0f172a}.codebox{background:#0f172a;color:#e2e8f0;border-radius:14px;padding:16px 18px;overflow:auto;font-family:Consolas,Monaco,monospace;font-size:15px;line-height:1.6;white-space:pre-wrap}.step{border-left:5px solid #f97316;padding-left:16px;margin-top:18px}.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.next a{display:inline-block;text-decoration:none;background:#ea580c;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700}</style></head><body><header><div class="wrap"><div class="badge">Chapter 3 · 세미프로젝트 · 60~90분</div><h1>고객 구매 예측 모델 만들기</h1><p>회귀와 분류 중 하나를 선택하고, 모델 학습·평가·해석까지 진행하는 머신러닝 미니 프로젝트입니다.</p><nav class="nav"><a href="chapter3.html">Chapter 3</a><a href="chapter3-combined-practice.html">이전: 종합 실습</a><a href="chapter4.html">Chapter 4</a></nav></div></header><main class="wrap"><section class="card"><h2>1. 프로젝트 목표</h2><p>고객 행동 데이터를 사용해 구매 여부를 예측하는 분류 모델을 만들고, 정확도와 혼동행렬을 통해 모델 성능을 해석합니다. 추가 도전 과제로 다음 달 매출 예측 회귀 모델도 설계할 수 있습니다.</p><div class="grid"><div class="mini"><strong>난이도</strong>단원별 실습보다 한 단계 높음</div><div class="mini"><strong>소요 시간</strong>60~90분</div><div class="mini"><strong>산출물</strong>모델 평가 결과 + 해석 리포트</div><div class="mini"><strong>핵심 역량</strong>문제 정의, 모델 선택, 평가 해석</div></div></section><section class="card"><h2>2. 문제 출제</h2><p>고객 데이터로 <strong>구매 여부 예측 모델</strong>을 작성하세요.</p><ul><li>입력값은 <code>visit_count</code>, <code>cart_amount</code>, <code>previous_orders</code>입니다.</li><li>목표값은 <code>purchased</code>입니다.</li><li>훈련 데이터와 테스트 데이터를 나눕니다.</li><li>분류 모델을 학습합니다.</li><li>테스트 정확도와 혼동행렬을 출력합니다.</li><li>모델 결과를 5문장 이상으로 해석합니다.</li></ul><div class="codebox">customer_id,visit_count,cart_amount,previous_orders,purchased,next_month_sales
+1,2,12000,1,0,25000
+2,5,45000,3,1,70000
+3,1,8000,0,0,10000
+4,7,60000,4,1,90000
+5,3,25000,2,1,40000
+6,2,10000,0,0,15000
+7,8,72000,5,1,100000
+8,4,30000,2,1,52000
+9,1,5000,0,0,8000
+10,6,55000,4,1,85000</div></section><section class="card"><h2>3. 활용 개념 정리</h2><table class="table"><tr><th>개념</th><th>활용</th></tr><tr><td>문제 정의</td><td>구매 여부 예측은 분류 문제로 정의합니다.</td></tr><tr><td>입력/정답 분리</td><td>X와 y를 나눕니다.</td></tr><tr><td>훈련/테스트 분리</td><td>새 데이터 성능을 확인합니다.</td></tr><tr><td>분류 모델</td><td>구매/미구매를 예측합니다.</td></tr><tr><td>정확도</td><td>전체 중 맞힌 비율을 확인합니다.</td></tr><tr><td>혼동행렬</td><td>어떤 유형의 오답이 발생했는지 확인합니다.</td></tr></table></section><section class="card"><h2>4. 단계별 해결 전략</h2><div class="step"><h3>Step 1. 데이터 준비</h3><p>CSV 또는 DataFrame으로 고객 데이터를 준비합니다.</p></div><div class="step"><h3>Step 2. 문제 정의</h3><p><code>purchased</code>를 예측하므로 분류 문제로 정의합니다.</p></div><div class="step"><h3>Step 3. X/y 분리</h3><div class="codebox"># TODO: 입력 컬럼과 목표 컬럼을 분리하세요.</div></div><div class="step"><h3>Step 4. 훈련/테스트 분리</h3><div class="codebox"># TODO: train_test_split으로 데이터를 나누세요.</div></div><div class="step"><h3>Step 5. 모델 학습과 예측</h3><div class="codebox"># TODO: LogisticRegression 모델을 학습하고 예측하세요.</div></div><div class="step"><h3>Step 6. 평가와 해석</h3><p>정확도와 혼동행렬을 확인하고 업무 관점으로 해석합니다.</p></div></section><section class="card"><h2>5. 수도코드</h2><div class="codebox">필요한 라이브러리를 불러온다.
+고객 데이터를 읽는다.
+입력 컬럼과 목표 컬럼을 정한다.
+훈련 데이터와 테스트 데이터로 나눈다.
+분류 모델을 만든다.
+훈련 데이터로 학습한다.
+테스트 데이터로 예측한다.
+정확도와 혼동행렬을 계산한다.
+예측 결과를 해석한다.
+결과 리포트를 작성한다.</div></section><section class="card"><h2>6. 실행 예시</h2><div class="codebox">테스트 정확도: 0.8
+혼동행렬:
+[[1 0]
+ [1 3]]
+
+해석 예시:
+1. 모델은 전체 테스트 데이터 중 80%를 맞혔습니다.
+2. 구매 고객 일부를 미구매로 예측한 오류가 있습니다.
+3. 장바구니 금액과 이전 주문 수가 구매 예측에 중요한 단서로 보입니다.
+4. 데이터 수가 적기 때문에 성능을 일반화하기 어렵습니다.
+5. 실제 적용 전에는 더 많은 고객 데이터로 재학습해야 합니다.</div></section><section class="card"><h2>7. 제출 기준</h2><ul><li>노트북 파일명: <code>chapter3_semiproject_이름.ipynb</code></li><li>문제 정의 문장 포함</li><li>입력/목표 컬럼 설명 포함</li><li>정확도와 혼동행렬 출력</li><li>모델 결과 해석 5문장 이상 작성</li><li>도전 과제: <code>next_month_sales</code> 회귀 모델 추가</li></ul><div class="summary"><strong>학습 목표:</strong> 모델을 만드는 것보다 “무엇을 예측하는지, 어떤 기준으로 평가하는지, 결과를 어떻게 해석하는지”가 더 중요합니다.</div></section><section class="card next"><a href="chapter3.html">← Chapter 3 목록으로</a><a href="chapter4.html">Chapter 4로 이동 →</a></section></main></body></html>
