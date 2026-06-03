@@ -1,0 +1,40 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Chapter 2-7 그래프 응용</title><style>*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;background:#f5f7fb;color:#1f2937;line-height:1.75}header{padding:56px 24px;background:linear-gradient(135deg,#065f46,#10b981);color:white}.wrap{width:min(1080px,calc(100% - 40px));margin:0 auto}.badge{display:inline-block;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);font-size:14px;margin-bottom:14px}h1{margin:0;font-size:clamp(30px,5vw,48px);letter-spacing:-.04em;line-height:1.2}header p{max-width:860px;margin:16px 0 0;opacity:.94;font-size:18px}.nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.nav a{color:white;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.12)}main{padding:36px 0 72px}.card{background:white;border:1px solid #e5e7eb;border-radius:18px;padding:28px;margin-bottom:22px;box-shadow:0 12px 28px rgba(15,23,42,.05)}h2{margin:0 0 16px;font-size:28px}h3{margin:24px 0 10px;color:#047857;font-size:21px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}.mini{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:16px;padding:18px}.mini strong{display:block;color:#047857;margin-bottom:6px}ul,ol{margin:10px 0 0;padding-left:22px}li{margin:7px 0}.callout{background:#fff7ed;border-left:6px solid #f97316;border-radius:14px;padding:18px 20px;margin-top:16px}.summary{background:#ecfdf5;border-left:6px solid #10b981;border-radius:14px;padding:18px 20px;margin-top:16px}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 14px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}.table th{background:#ecfdf5;color:#047857}code{background:#f1f5f9;border-radius:6px;padding:2px 6px;color:#0f172a}.codebox{background:#0f172a;color:#e2e8f0;border-radius:14px;padding:16px 18px;overflow:auto;font-family:Consolas,Monaco,monospace;font-size:15px;line-height:1.6;white-space:pre-wrap}.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.next a{display:inline-block;text-decoration:none;background:#059669;color:white;padding:11px 16px;border-radius:12px;font-weight:700}</style></head><body><header><div class="wrap"><div class="badge">Chapter 2-7</div><h1>그래프 응용</h1><p>그래프 꾸미기, 여러 그래프 비교, 분석 결과 시각화 표현 방법을 학습합니다.</p><nav class="nav"><a href="chapter2.html">Chapter 2</a><a href="chapter2-graph-basic.html">이전</a><a href="chapter2-eda-practice.html">다음</a></nav></div></header><main class="wrap"><section class="card"><h2>1. 보기 좋은 그래프가 필요한 이유</h2><p>그래프는 단순히 그리는 것보다 해석하기 쉽게 만드는 것이 중요합니다. 제목, 축 이름, 범례, 값 표시가 적절히 들어가면 다른 사람이 분석 결과를 더 쉽게 이해할 수 있습니다.</p><div class="grid"><div class="mini"><strong>제목</strong>그래프가 말하는 핵심 주제를 보여줍니다.</div><div class="mini"><strong>축 이름</strong>x축과 y축의 의미를 설명합니다.</div><div class="mini"><strong>범례</strong>여러 선이나 막대의 의미를 구분합니다.</div><div class="mini"><strong>값 표시</strong>중요 수치를 직접 보여줍니다.</div></div></section><section class="card"><h2>2. 그래프 기본 꾸미기</h2><div class="codebox">import matplotlib.pyplot as plt
+
+months = ["1월", "2월", "3월"]
+sales = [300, 450, 380]
+
+plt.plot(months, sales, marker="o", label="매출")
+plt.title("월별 매출 변화")
+plt.xlabel("월")
+plt.ylabel("매출")
+plt.legend()
+plt.grid(True)
+plt.show()</div></section><section class="card"><h2>3. 여러 데이터 비교하기</h2><p>두 개 이상의 값을 비교할 때는 여러 선을 한 그래프에 그릴 수 있습니다.</p><div class="codebox">months = ["1월", "2월", "3월"]
+sales_a = [300, 450, 380]
+sales_b = [280, 420, 500]
+
+plt.plot(months, sales_a, marker="o", label="A지점")
+plt.plot(months, sales_b, marker="o", label="B지점")
+plt.title("지점별 월별 매출 비교")
+plt.legend()
+plt.show()</div></section><section class="card"><h2>4. 막대그래프에 값 표시하기</h2><p>막대 위에 값을 직접 표시하면 보고서에서 결과를 더 명확하게 전달할 수 있습니다.</p><div class="codebox">branches = ["강남점", "분당점", "수원점"]
+sales = [350, 280, 310]
+
+plt.bar(branches, sales)
+plt.title("지점별 매출")
+
+for i, value in enumerate(sales):
+    plt.text(i, value, str(value), ha="center", va="bottom")
+
+plt.show()</div></section><section class="card"><h2>5. 분석 메시지와 연결하기</h2><p>그래프를 그린 뒤에는 “그래프가 무엇을 말하는지”를 문장으로 정리해야 합니다. 시각화는 결과물이 아니라 해석을 돕는 도구입니다.</p><table class="table"><tr><th>그래프 관찰</th><th>해석 문장 예시</th></tr><tr><td>3월 매출이 가장 높다</td><td>3월 프로모션 이후 매출이 증가한 것으로 보입니다.</td></tr><tr><td>A지점이 꾸준히 높다</td><td>A지점은 안정적인 매출 기반을 가진 것으로 판단됩니다.</td></tr><tr><td>특정 값이 매우 낮다</td><td>해당 기간의 운영 이슈나 데이터 누락 가능성을 점검해야 합니다.</td></tr></table></section><section class="card"><h2>6. 실습 체크리스트</h2><ul><li>그래프에 제목과 축 이름을 추가할 수 있다.</li><li>범례를 사용해 여러 데이터를 구분할 수 있다.</li><li>막대그래프에 값을 표시할 수 있다.</li><li>그래프 결과를 해석 문장으로 정리할 수 있다.</li></ul></section><section class="card"><h2>7. 종합 실습 문제</h2><h3>1. 문제 출제</h3><p>두 지점의 월별 매출을 하나의 선 그래프로 비교하고, 지점별 총매출을 막대그래프로 표현하세요.</p><ul><li>A지점과 B지점의 월별 매출을 선 그래프로 비교합니다.</li><li>범례, 제목, 축 이름을 추가합니다.</li><li>각 지점의 총매출을 계산합니다.</li><li>총매출을 막대그래프로 표현하고 막대 위에 값을 표시합니다.</li><li>그래프에서 알 수 있는 점을 2문장으로 작성합니다.</li></ul><h3>2. 개념 요약</h3><table class="table"><tr><th>개념</th><th>활용</th></tr><tr><td>plot</td><td>월별 변화 비교</td></tr><tr><td>legend</td><td>지점 구분</td></tr><tr><td>sum</td><td>총매출 계산</td></tr><tr><td>bar/text</td><td>막대그래프와 값 표시</td></tr></table><h3>3. 수도코드</h3><div class="codebox">월 리스트를 만든다.
+A지점 매출 리스트를 만든다.
+B지점 매출 리스트를 만든다.
+두 지점의 선 그래프를 그린다.
+제목, 축 이름, 범례를 추가한다.
+A지점과 B지점 총매출을 계산한다.
+총매출 막대그래프를 그린다.
+막대 위에 값을 표시한다.
+해석 문장 2개를 작성한다.</div><h3>4. 실행 예시</h3><div class="codebox">A지점 총매출: 1130
+B지점 총매출: 1200
+해석 1: B지점의 총매출이 A지점보다 높습니다.
+해석 2: A지점은 2월에 가장 높은 매출을 보였고, B지점은 3월에 크게 증가했습니다.</div></section><section class="card next"><a href="chapter2.html">← Chapter 2 목록</a><a href="chapter2-eda-practice.html">다음 학습 →</a></section></main></body></html>
