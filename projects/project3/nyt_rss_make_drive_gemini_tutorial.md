@@ -13,7 +13,7 @@ Make가 NYTimes RSS를 주기적으로 확인
 ↓
 Google Drive for desktop이 내 PC로 자동 동기화
 ↓
-로컬 Python이 inbox의 JSON 파일을 읽음
+로컬 Jupyter Notebook이 inbox의 JSON 파일을 읽음
 ↓
 Gemini API로 제목/요약을 한국어로 번역
 ↓
@@ -38,7 +38,7 @@ Google Sheets에 발송 이력 기록
 |---|---|
 | 데이터 수집 | Make RSS 모듈로 NYTimes RSS 수집 |
 | 데이터 적재 | Google Drive에 JSON 파일 저장 |
-| 로컬 자동 처리 | Python으로 Drive 동기화 폴더 읽기 |
+| 로컬 자동 처리 | Jupyter Notebook으로 Drive 동기화 폴더 읽기 |
 | AI 활용 | Gemini API로 영어 뉴스 제목/요약을 한국어 번역 |
 | 텍스트 시각화 | WordCloud 이미지 생성 |
 | 보고서 작성 | HTML 자동 보고서 생성 |
@@ -69,7 +69,7 @@ Google Sheets에 발송 이력 기록
           │ Drive for desktop 동기화
           ▼
 ┌────────────────────┐
-│ Local PC Python     │
+│ Local Notebook      │
 │ 번역/워드클라우드/보고서 │
 └─────────┬──────────┘
           │ HTML 보고서 저장
@@ -109,7 +109,7 @@ Google Sheets에 발송 이력 기록
 이 실습에서는 아래 패키지를 사용합니다.
 
 ```text
-python-dotenv
+jupyter
 pandas
 google-genai
 wordcloud
@@ -150,8 +150,8 @@ Google Drive의 `내 드라이브` 아래에 다음 폴더를 만듭니다.
 | 폴더 | 역할 |
 |---|---|
 | inbox | Make가 RSS 뉴스 JSON 파일을 저장하는 곳 |
-| outbox | Python이 만든 보고서를 저장하는 곳 |
-| archive | Python 처리 완료 후 원본 JSON을 옮기는 곳 |
+| outbox | Notebook이 만든 보고서를 저장하는 곳 |
+| archive | Notebook 처리 완료 후 원본 JSON을 옮기는 곳 |
 | logs | 실행 로그 저장용 |
 
 ### 3.3 Windows 경로 예시
@@ -170,7 +170,7 @@ G:\내 드라이브\nyt_news_project
 C:\Users\사용자명\Google Drive\내 드라이브\nyt_news_project
 ```
 
-이 경로는 뒤에서 `.env` 파일에 입력합니다.
+이 경로는 뒤에서 **노트북 설정 셀에 직접 입력**합니다.
 
 ---
 
@@ -310,9 +310,9 @@ nyt_{{formatDate(now; "YYYYMMDD_HHmmss")}}_{{replace(1.title; "/"; "-")}}.json
 
 ---
 
-## 5. 로컬 Python 프로젝트 만들기
+## 5. 로컬 Jupyter Notebook 실습 폴더 만들기
 
-이제 로컬 PC에서 Python 프로젝트를 만듭니다.
+이제 로컬 PC에서 **주피터 노트북 1개로 전체 흐름을 실행하는 방식**으로 구성합니다.
 
 ### 5.1 프로젝트 폴더 만들기
 
@@ -326,20 +326,17 @@ VS Code에서 이 폴더를 엽니다.
 
 ### 5.2 최종 폴더 구조
 
-아래 구조를 만들 것입니다.
+아래처럼 최대한 단순하게 구성합니다.
 
 ```text
 nyt_rss_local_processor/
 │
-├── src/
-│   ├── create_sample_input.py
-│   └── main.py
-│
-├── .env
-├── .env.example
-├── requirements.txt
-└── README.md
+├── nyt_rss_make_drive_gemini.ipynb
+└── requirements.txt
 ```
+
+> 이번 실습은 **수업용/테스트용** 기준으로 단순화합니다.
+> 따라서 API Key, Drive 경로 같은 값도 노트북 안에 직접 적는 방식으로 설명합니다.
 
 ---
 
@@ -351,7 +348,7 @@ nyt_rss_local_processor/
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-pip install -r requirements.txt
+pip install jupyter pandas google-genai wordcloud matplotlib
 ```
 
 ### 6.2 macOS / Linux 기준
@@ -360,7 +357,13 @@ pip install -r requirements.txt
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-pip install -r requirements.txt
+pip install jupyter pandas google-genai wordcloud matplotlib
+```
+
+VS Code에서 새 Jupyter Notebook 파일을 만들고 이름을 다음처럼 저장합니다.
+
+```text
+nyt_rss_make_drive_gemini.ipynb
 ```
 
 ---
@@ -370,127 +373,515 @@ pip install -r requirements.txt
 프로젝트 루트에 `requirements.txt` 파일을 만들고 아래 내용을 붙여넣습니다.
 
 ```txt
-python-dotenv
+jupyter
 pandas
 google-genai
 wordcloud
 matplotlib
 ```
 
-> 최신 Python 환경에서 설치 오류를 줄이기 위해 버전 번호를 고정하지 않았습니다.
-> 실무에서는 프로젝트 안정성을 위해 정상 동작한 버전을 기록해 두는 것이 좋습니다.
+노트북 안에서 바로 설치하고 싶다면 첫 번째 셀에 아래처럼 입력해도 됩니다.
 
----
-
-## 8. 파일 2: .env.example
-
-프로젝트 루트에 `.env.example` 파일을 만들고 아래 내용을 붙여넣습니다.
-
-```env
-# Gemini API Key
-GEMINI_API_KEY=여기에_Gemini_API_Key_입력
-
-# Google Drive for desktop 동기화 폴더 경로
-# Windows 예시: G:\내 드라이브\nyt_news_project
-# macOS 예시: /Users/사용자명/Library/CloudStorage/GoogleDrive-계정/My Drive/nyt_news_project
-DRIVE_BASE_DIR=G:\내 드라이브\nyt_news_project
-
-# Gemini 사용 여부
-# true: Gemini API로 번역
-# false: Gemini 없이 원문 그대로 보고서 생성
-USE_GEMINI=true
-
-# 한 번에 처리할 최대 뉴스 수
-MAX_ITEMS_PER_RUN=20
-
-# 워드클라우드용 폰트 경로
-# 비워두면 기본 영문 폰트를 사용합니다.
-# 한국어 워드클라우드를 만들고 싶으면 NanumGothic.ttf 같은 폰트 경로를 넣으세요.
-FONT_PATH=
+```python
+%pip install pandas google-genai wordcloud matplotlib
 ```
 
 ---
 
-## 9. 파일 3: .env
+## 8. 파일 2: `nyt_rss_make_drive_gemini.ipynb` 만들기
 
-`.env.example` 파일을 복사해서 `.env` 파일을 만듭니다.
+이제부터는 `.py` 파일이 아니라 **노트북 셀 단위로 실행**합니다.
+
+추천 셀 구성은 다음과 같습니다.
 
 ```text
-.env.example 복사
-↓
-.env로 이름 변경
-↓
-본인 설정값 입력
-```
-
-Windows 예시:
-
-```env
-GEMINI_API_KEY=본인의_Gemini_API_Key
-DRIVE_BASE_DIR=G:\내 드라이브\nyt_news_project
-USE_GEMINI=true
-MAX_ITEMS_PER_RUN=20
-FONT_PATH=
-```
-
-Gemini API 없이 먼저 테스트하려면 다음처럼 설정합니다.
-
-```env
-GEMINI_API_KEY=
-DRIVE_BASE_DIR=G:\내 드라이브\nyt_news_project
-USE_GEMINI=false
-MAX_ITEMS_PER_RUN=20
-FONT_PATH=
+선택 셀: 패키지 설치
+셀 1: 설정값 하드코딩
+셀 2: 공통 함수 정의
+셀 3: 샘플 JSON 생성(선택)
+셀 4: 전체 실행
 ```
 
 ---
 
-## 10. Gemini API Key 준비
+## 9. 노트북 셀 1: 설정값 하드코딩
 
-1. Google AI Studio 접속
-2. API Key 생성
-3. `.env` 파일의 `GEMINI_API_KEY`에 붙여넣기
-
-주의:
-
-```text
-API Key는 GitHub에 올리면 안 됩니다.
-.env 파일은 개인 PC에만 보관합니다.
-```
-
----
-
-## 11. 파일 4: src/create_sample_input.py
-
-Make 설정 전에 Python만 먼저 테스트할 수 있도록 샘플 JSON 파일을 만드는 코드입니다.
-
-`src/create_sample_input.py` 파일을 만들고 아래 코드를 붙여넣습니다.
+테스트용이므로 `.env` 파일 없이 아래처럼 **노트북 안에 직접 값 입력** 방식으로 진행합니다.
 
 ```python
 from pathlib import Path
 from datetime import datetime
+from html import unescape
+import base64
 import json
-import os
+import re
+import shutil
+import time
 
-from dotenv import load_dotenv
+import pandas as pd
+from wordcloud import WordCloud, STOPWORDS
+
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+try:
+    from google import genai
+except ImportError:
+    genai = None
 
 
-def main():
-    """
-    Make 없이도 실습을 테스트하기 위해
-    Google Drive inbox 폴더에 샘플 RSS JSON 파일을 생성합니다.
-    """
-    load_dotenv()
+# =============================
+# 테스트용 설정값 직접 입력
+# =============================
+GEMINI_API_KEY = "여기에_테스트용_Gemini_API_Key_직접입력"
+DRIVE_BASE_DIR = r"G:\내 드라이브\nyt_news_project"
+USE_GEMINI = True
+MAX_ITEMS_PER_RUN = 20
+FONT_PATH = r""   # 예: r"C:\Windows\Fonts\malgun.ttf"
 
-    drive_base_dir = os.getenv("DRIVE_BASE_DIR")
 
-    if not drive_base_dir:
-        raise ValueError(".env 파일에 DRIVE_BASE_DIR 값을 먼저 입력해 주세요.")
+BASE_DIR = Path(DRIVE_BASE_DIR)
+INBOX_DIR = BASE_DIR / "inbox"
+OUTBOX_DIR = BASE_DIR / "outbox"
+ARCHIVE_DIR = BASE_DIR / "archive"
+LOGS_DIR = BASE_DIR / "logs"
 
-    base_dir = Path(drive_base_dir)
-    inbox_dir = base_dir / "inbox"
-    inbox_dir.mkdir(parents=True, exist_ok=True)
+for path in [BASE_DIR, INBOX_DIR, OUTBOX_DIR, ARCHIVE_DIR, LOGS_DIR]:
+    path.mkdir(parents=True, exist_ok=True)
 
+print("설정 완료")
+print("Google Drive 기준 폴더:", BASE_DIR)
+print("Gemini 사용 여부:", USE_GEMINI)
+```
+
+Gemini 없이 먼저 테스트하려면 아래처럼 바꾸면 됩니다.
+
+```python
+GEMINI_API_KEY = ""
+USE_GEMINI = False
+```
+
+> 수업용으로는 하드코딩이 가장 단순하지만, 실무에서는 키를 코드에 직접 넣지 않는 것이 좋습니다.
+
+---
+
+## 10. 노트북 셀 2: 공통 함수 정의
+
+아래 셀 하나에 핵심 함수들을 넣습니다.
+
+```python
+def clean_html(text):
+    if text is None:
+        return ""
+
+    text = unescape(str(text))
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
+def read_news_json(file_path):
+    with open(file_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    if isinstance(data, dict) and "items" in data and isinstance(data["items"], list):
+        items = data["items"]
+    elif isinstance(data, list):
+        items = data
+    elif isinstance(data, dict):
+        items = [data]
+    else:
+        items = []
+
+    cleaned_items = []
+
+    for item in items:
+        title = clean_html(item.get("title", ""))
+        description = clean_html(item.get("description", ""))
+        link = str(item.get("link", "")).strip()
+        published_at = str(item.get("published_at", item.get("pubDate", item.get("date", "")))).strip()
+        collected_at = str(item.get("collected_at", "")).strip()
+        source = str(item.get("source", "NYTimes RSS")).strip()
+
+        if not title and not link:
+            continue
+
+        cleaned_items.append({
+            "source_file": file_path.name,
+            "source": source,
+            "title_en": title,
+            "summary_en": description,
+            "link": link,
+            "published_at": published_at,
+            "collected_at": collected_at,
+        })
+
+    return cleaned_items
+
+
+def load_all_inbox_items(inbox_dir, max_items):
+    json_files = sorted(inbox_dir.glob("*.json"))
+    all_items = []
+    used_files = []
+    seen_links = set()
+
+    for file_path in json_files:
+        try:
+            items = read_news_json(file_path)
+            used_files.append(file_path)
+        except Exception as e:
+            print(f"[경고] JSON 읽기 실패: {file_path.name} / {e}")
+            continue
+
+        for item in items:
+            link = item.get("link", "")
+
+            if link and link in seen_links:
+                continue
+
+            if link:
+                seen_links.add(link)
+
+            all_items.append(item)
+
+            if len(all_items) >= max_items:
+                break
+
+        if len(all_items) >= max_items:
+            break
+
+    return all_items, used_files
+
+
+def parse_json_from_gemini_text(text):
+    if not text:
+        return {}
+
+    cleaned = text.strip()
+    cleaned = re.sub(r"^```json", "", cleaned).strip()
+    cleaned = re.sub(r"^```", "", cleaned).strip()
+    cleaned = re.sub(r"```$", "", cleaned).strip()
+
+    try:
+        return json.loads(cleaned)
+    except Exception:
+        pass
+
+    match = re.search(r"\{.*\}", cleaned, re.DOTALL)
+    if match:
+        try:
+            return json.loads(match.group(0))
+        except Exception:
+            return {}
+
+    return {}
+
+
+def translate_with_gemini(client, title_en, summary_en):
+    prompt = f"""
+다음은 NYTimes RSS 뉴스의 제목과 요약입니다.
+
+[영문 제목]
+{title_en}
+
+[영문 요약]
+{summary_en}
+
+작업:
+1. 제목을 자연스러운 한국어로 번역하세요.
+2. 요약을 자연스러운 한국어로 번역하세요.
+3. 핵심 키워드 5개를 한국어로 추출하세요.
+
+반드시 아래 JSON 형식으로만 답하세요.
+
+{{
+  "title_ko": "한국어 제목",
+  "summary_ko": "한국어 요약",
+  "keywords_ko": ["키워드1", "키워드2", "키워드3", "키워드4", "키워드5"]
+}}
+"""
+
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+    )
+
+    result = parse_json_from_gemini_text(response.text)
+
+    return {
+        "title_ko": result.get("title_ko", title_en),
+        "summary_ko": result.get("summary_ko", summary_en),
+        "keywords_ko": result.get("keywords_ko", []),
+    }
+
+
+def translate_items(items, use_gemini, api_key):
+    if not use_gemini:
+        print("Gemini 번역 비활성화: 원문을 그대로 사용합니다.")
+        for item in items:
+            item["title_ko"] = item["title_en"]
+            item["summary_ko"] = item["summary_en"]
+            item["keywords_ko"] = []
+        return items
+
+    if not api_key:
+        print("[경고] API Key가 비어 있습니다. 원문을 그대로 사용합니다.")
+        for item in items:
+            item["title_ko"] = item["title_en"]
+            item["summary_ko"] = item["summary_en"]
+            item["keywords_ko"] = []
+        return items
+
+    if genai is None:
+        print("[경고] google-genai 패키지를 불러올 수 없습니다. 원문을 그대로 사용합니다.")
+        for item in items:
+            item["title_ko"] = item["title_en"]
+            item["summary_ko"] = item["summary_en"]
+            item["keywords_ko"] = []
+        return items
+
+    client = genai.Client(api_key=api_key)
+
+    for index, item in enumerate(items, start=1):
+        print(f"Gemini 번역 중... ({index}/{len(items)}) {item['title_en'][:40]}")
+        try:
+            result = translate_with_gemini(client, item["title_en"], item["summary_en"])
+            item["title_ko"] = result["title_ko"]
+            item["summary_ko"] = result["summary_ko"]
+            item["keywords_ko"] = result["keywords_ko"]
+        except Exception as e:
+            print(f"[경고] Gemini 번역 실패. 원문 사용: {e}")
+            item["title_ko"] = item["title_en"]
+            item["summary_ko"] = item["summary_en"]
+            item["keywords_ko"] = []
+
+        time.sleep(0.5)
+
+    return items
+
+
+def make_wordcloud_text(items):
+    texts = []
+    for item in items:
+        texts.append(item.get("title_en", ""))
+        texts.append(item.get("summary_en", ""))
+        keywords = item.get("keywords_ko", [])
+        if isinstance(keywords, list):
+            texts.extend(keywords)
+    return " ".join(texts)
+
+
+def create_wordcloud_image(items, output_path, font_path=""):
+    text = make_wordcloud_text(items)
+    if not text.strip():
+        text = "news technology artificial intelligence data cloud automation"
+
+    stopwords = set(STOPWORDS)
+    stopwords.update({"said", "will", "new", "one", "two", "may", "also", "more", "news", "york", "times", "nyt", "rss"})
+
+    wc_kwargs = {
+        "width": 1200,
+        "height": 700,
+        "background_color": "white",
+        "stopwords": stopwords,
+        "collocations": False,
+    }
+
+    if font_path and Path(font_path).exists():
+        wc_kwargs["font_path"] = font_path
+
+    wordcloud = WordCloud(**wc_kwargs).generate(text)
+
+    plt.figure(figsize=(12, 7))
+    plt.imshow(wordcloud, interpolation="bilinear")
+    plt.axis("off")
+    plt.tight_layout(pad=0)
+    plt.savefig(output_path, dpi=150, bbox_inches="tight")
+    plt.close()
+
+    print(f"워드클라우드 저장 완료: {output_path}")
+
+
+def image_to_base64(image_path):
+    with open(image_path, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
+
+
+def build_report_html(items, wordcloud_path, report_title):
+    image_base64 = image_to_base64(wordcloud_path)
+    now_text = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    rows_html = []
+    for index, item in enumerate(items, start=1):
+        keywords = item.get("keywords_ko", [])
+        keyword_text = ", ".join(keywords) if isinstance(keywords, list) else ""
+        rows_html.append(f"""
+        <tr>
+            <td>{index}</td>
+            <td>
+                <strong>{item.get('title_ko', '')}</strong><br>
+                <span class="small">원문: {item.get('title_en', '')}</span>
+            </td>
+            <td>{item.get('summary_ko', '')}</td>
+            <td>{keyword_text}</td>
+            <td><a href="{item.get('link', '')}" target="_blank">원문 보기</a></td>
+        </tr>
+        """)
+
+    rows = "\n".join(rows_html)
+
+    html = f"""
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>{report_title}</title>
+    <style>
+        body {{ font-family: Arial, 'Malgun Gothic', sans-serif; margin: 40px; line-height: 1.6; color: #222; }}
+        h1 {{ border-bottom: 3px solid #333; padding-bottom: 10px; }}
+        .summary-box {{ background: #f5f7fa; border: 1px solid #d9dee7; padding: 16px; border-radius: 8px; margin: 20px 0; }}
+        table {{ width: 100%; border-collapse: collapse; margin-top: 20px; }}
+        th, td {{ border: 1px solid #ddd; padding: 10px; vertical-align: top; }}
+        th {{ background: #f0f0f0; }}
+        .small {{ color: #666; font-size: 0.9em; }}
+        .wordcloud {{ max-width: 100%; border: 1px solid #ddd; border-radius: 8px; }}
+        .footer {{ margin-top: 40px; color: #777; font-size: 0.9em; }}
+    </style>
+</head>
+<body>
+    <h1>{report_title}</h1>
+    <div class="summary-box">
+        <p><strong>생성 시각:</strong> {now_text}</p>
+        <p><strong>뉴스 개수:</strong> {len(items)}건</p>
+        <p>이 보고서는 NYTimes RSS 제목과 요약만 사용해 생성했습니다.</p>
+    </div>
+    <h2>1. 주요 키워드 워드클라우드</h2>
+    <img class="wordcloud" src="data:image/png;base64,{image_base64}" alt="wordcloud">
+    <h2>2. 번역 뉴스 목록</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>요약</th>
+                <th>키워드</th>
+                <th>링크</th>
+            </tr>
+        </thead>
+        <tbody>
+            {rows}
+        </tbody>
+    </table>
+    <div class="footer">
+        <p>자동 생성 보고서 · Jupyter Notebook + Gemini API + Google Drive + Make</p>
+    </div>
+</body>
+</html>
+"""
+
+    return html
+
+
+def save_translated_csv(items, csv_path):
+    rows = []
+    for item in items:
+        keywords = item.get("keywords_ko", [])
+        keyword_text = ", ".join(keywords) if isinstance(keywords, list) else ""
+        rows.append({
+            "source": item.get("source", ""),
+            "title_en": item.get("title_en", ""),
+            "summary_en": item.get("summary_en", ""),
+            "title_ko": item.get("title_ko", ""),
+            "summary_ko": item.get("summary_ko", ""),
+            "keywords_ko": keyword_text,
+            "link": item.get("link", ""),
+            "published_at": item.get("published_at", ""),
+            "collected_at": item.get("collected_at", ""),
+            "source_file": item.get("source_file", ""),
+        })
+
+    pd.DataFrame(rows).to_csv(csv_path, index=False, encoding="utf-8-sig")
+    print(f"CSV 저장 완료: {csv_path}")
+
+
+def archive_files(files, archive_dir):
+    for file_path in files:
+        target_path = archive_dir / file_path.name
+
+        if target_path.exists():
+            stem = file_path.stem
+            suffix = file_path.suffix
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            target_path = archive_dir / f"{stem}_{timestamp}{suffix}"
+
+        shutil.move(str(file_path), str(target_path))
+        print(f"archive 이동 완료: {target_path}")
+
+
+def run_pipeline():
+    print("====================================")
+    print("NYTimes RSS 자동 보고서 생성 시작")
+    print("====================================")
+    print("Google Drive 기준 폴더:", BASE_DIR)
+    print("Gemini 사용 여부:", USE_GEMINI)
+
+    items, used_files = load_all_inbox_items(INBOX_DIR, MAX_ITEMS_PER_RUN)
+
+    if not items:
+        print("처리할 JSON 파일이 없습니다.")
+        print("먼저 Make가 inbox 폴더에 JSON 파일을 만들었는지 확인하세요.")
+        return None
+
+    print("처리할 뉴스 개수:", len(items))
+    print("처리할 원본 파일 개수:", len(used_files))
+
+    translated_items = translate_items(items, USE_GEMINI, GEMINI_API_KEY)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    report_title = f"NYTimes RSS AI 뉴스 브리핑 - {datetime.now().strftime('%Y-%m-%d')}"
+
+    csv_path = OUTBOX_DIR / f"nyt_translated_news_{timestamp}.csv"
+    wordcloud_path = OUTBOX_DIR / f"nyt_wordcloud_{timestamp}.png"
+    report_path = OUTBOX_DIR / f"nyt_report_{timestamp}.html"
+    log_path = LOGS_DIR / f"run_log_{timestamp}.txt"
+
+    save_translated_csv(translated_items, csv_path)
+    create_wordcloud_image(translated_items, wordcloud_path, FONT_PATH)
+
+    html = build_report_html(translated_items, wordcloud_path, report_title)
+    with open(report_path, "w", encoding="utf-8") as f:
+        f.write(html)
+    print(f"HTML 보고서 저장 완료: {report_path}")
+
+    with open(log_path, "w", encoding="utf-8") as f:
+        f.write("NYTimes RSS 자동 보고서 생성 완료\n")
+        f.write(f"생성 시각: {datetime.now().isoformat()}\n")
+        f.write(f"뉴스 개수: {len(translated_items)}\n")
+        f.write(f"CSV: {csv_path}\n")
+        f.write(f"WordCloud: {wordcloud_path}\n")
+        f.write(f"Report: {report_path}\n")
+
+    print(f"로그 저장 완료: {log_path}")
+
+    archive_files(used_files, ARCHIVE_DIR)
+
+    print("====================================")
+    print("전체 처리 완료")
+    print("====================================")
+    print(f"보고서 파일: {report_path}")
+
+    return report_path
+```
+
+---
+
+## 11. 노트북 셀 3: 샘플 JSON 생성 함수
+
+Make 연결 전에 테스트하고 싶다면 아래 셀을 실행합니다.
+
+```python
+def create_sample_input():
     now = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     sample_items = [
@@ -521,744 +912,53 @@ def main():
     ]
 
     for index, item in enumerate(sample_items, start=1):
-        file_path = inbox_dir / f"sample_nyt_{now}_{index}.json"
+        file_path = INBOX_DIR / f"sample_nyt_{now}_{index}.json"
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(item, f, ensure_ascii=False, indent=2)
         print(f"샘플 파일 생성 완료: {file_path}")
+```
 
+샘플 파일이 필요하면 바로 아래 셀에서 실행합니다.
 
-if __name__ == "__main__":
-    main()
+```python
+create_sample_input()
 ```
 
 ---
 
-## 12. 파일 5: src/main.py
+## 12. 노트북 셀 4: 전체 실행
 
-이 파일이 핵심 코드입니다.
-
-역할:
-
-```text
-1. Google Drive inbox 폴더에서 JSON 파일 찾기
-2. 뉴스 제목/요약 읽기
-3. Gemini API로 한국어 번역
-4. CSV 저장
-5. 워드클라우드 생성
-6. HTML 보고서 생성
-7. outbox에 결과 저장
-8. 처리 완료 JSON을 archive로 이동
-```
-
-`src/main.py` 파일을 만들고 아래 코드를 붙여넣습니다.
+아래 셀을 실행하면 CSV, 워드클라우드, HTML 보고서가 한 번에 생성됩니다.
 
 ```python
-from pathlib import Path
-from datetime import datetime
-from html import unescape
-import base64
-import json
-import os
-import re
-import shutil
-import time
-
-import pandas as pd
-from dotenv import load_dotenv
-from wordcloud import WordCloud, STOPWORDS
-
-# matplotlib은 서버 환경에서 화면 없이 이미지 저장만 하도록 설정합니다.
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-
-try:
-    from google import genai
-except ImportError:
-    genai = None
-
-
-# -----------------------------
-# 1. 기본 유틸 함수
-# -----------------------------
-
-def clean_html(text: str) -> str:
-    """
-    RSS description에는 HTML 태그가 섞여 있을 수 있습니다.
-    예: <p>Some text</p>
-    이 함수는 HTML 태그를 제거하고 일반 텍스트만 남깁니다.
-    """
-    if text is None:
-        return ""
-
-    text = unescape(str(text))
-    text = re.sub(r"<[^>]+>", " ", text)
-    text = re.sub(r"\s+", " ", text).strip()
-    return text
-
-
-def safe_filename(text: str, max_length: int = 50) -> str:
-    """
-    파일명에 사용할 수 없는 문자를 제거합니다.
-    """
-    text = re.sub(r"[^a-zA-Z0-9가-힣_-]+", "_", text)
-    text = text.strip("_")
-    return text[:max_length] if text else "news"
-
-
-def ensure_project_dirs(base_dir: Path) -> dict:
-    """
-    Google Drive 실습 폴더 아래에 필요한 하위 폴더를 생성합니다.
-    """
-    dirs = {
-        "base": base_dir,
-        "inbox": base_dir / "inbox",
-        "outbox": base_dir / "outbox",
-        "archive": base_dir / "archive",
-        "logs": base_dir / "logs",
-    }
-
-    for path in dirs.values():
-        path.mkdir(parents=True, exist_ok=True)
-
-    return dirs
-
-
-# -----------------------------
-# 2. RSS JSON 파일 읽기
-# -----------------------------
-
-def read_news_json(file_path: Path) -> list[dict]:
-    """
-    Make가 저장한 JSON 파일을 읽습니다.
-
-    이 코드는 두 가지 형태를 모두 지원합니다.
-
-    1) 뉴스 1건짜리 JSON
-    {
-      "title": "...",
-      "description": "...",
-      "link": "..."
-    }
-
-    2) 여러 건이 들어있는 JSON
-    {
-      "items": [ {...}, {...} ]
-    }
-    """
-    with open(file_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    if isinstance(data, dict) and "items" in data and isinstance(data["items"], list):
-        items = data["items"]
-    elif isinstance(data, list):
-        items = data
-    elif isinstance(data, dict):
-        items = [data]
-    else:
-        items = []
-
-    cleaned_items = []
-
-    for item in items:
-        title = clean_html(item.get("title", ""))
-        description = clean_html(item.get("description", ""))
-        link = str(item.get("link", "")).strip()
-        published_at = str(item.get("published_at", item.get("pubDate", item.get("date", "")))).strip()
-        collected_at = str(item.get("collected_at", "")).strip()
-        source = str(item.get("source", "NYTimes RSS")).strip()
-
-        # 제목과 링크가 모두 없으면 뉴스로 보기 어렵기 때문에 제외합니다.
-        if not title and not link:
-            continue
-
-        cleaned_items.append({
-            "source_file": file_path.name,
-            "source": source,
-            "title_en": title,
-            "summary_en": description,
-            "link": link,
-            "published_at": published_at,
-            "collected_at": collected_at,
-        })
-
-    return cleaned_items
-
-
-def load_all_inbox_items(inbox_dir: Path, max_items: int) -> tuple[list[dict], list[Path]]:
-    """
-    inbox 폴더에 있는 JSON 파일들을 읽어서 뉴스 목록으로 합칩니다.
-    """
-    json_files = sorted(inbox_dir.glob("*.json"))
-
-    all_items = []
-    used_files = []
-    seen_links = set()
-
-    for file_path in json_files:
-        try:
-            items = read_news_json(file_path)
-            used_files.append(file_path)
-        except Exception as e:
-            print(f"[경고] JSON 읽기 실패: {file_path.name} / {e}")
-            continue
-
-        for item in items:
-            link = item.get("link", "")
-
-            # 같은 링크가 여러 번 들어오면 한 번만 처리합니다.
-            if link and link in seen_links:
-                continue
-
-            if link:
-                seen_links.add(link)
-
-            all_items.append(item)
-
-            if len(all_items) >= max_items:
-                break
-
-        if len(all_items) >= max_items:
-            break
-
-    return all_items, used_files
-
-
-# -----------------------------
-# 3. Gemini API 번역
-# -----------------------------
-
-def parse_json_from_gemini_text(text: str) -> dict:
-    """
-    Gemini가 JSON만 반환하도록 요청하더라도,
-    가끔 ```json ... ``` 코드블록으로 감싸서 줄 수 있습니다.
-    이 함수는 응답에서 JSON 부분만 최대한 안전하게 추출합니다.
-    """
-    if not text:
-        return {}
-
-    cleaned = text.strip()
-
-    # 코드블록 제거
-    cleaned = re.sub(r"^```json", "", cleaned).strip()
-    cleaned = re.sub(r"^```", "", cleaned).strip()
-    cleaned = re.sub(r"```$", "", cleaned).strip()
-
-    # 전체가 JSON이면 바로 파싱
-    try:
-        return json.loads(cleaned)
-    except Exception:
-        pass
-
-    # 텍스트 중괄호 영역만 추출해서 파싱 시도
-    match = re.search(r"\{.*\}", cleaned, re.DOTALL)
-    if match:
-        try:
-            return json.loads(match.group(0))
-        except Exception:
-            return {}
-
-    return {}
-
-
-def translate_with_gemini(client, title_en: str, summary_en: str) -> dict:
-    """
-    Gemini API를 사용해 제목과 요약을 한국어로 번역합니다.
-    기사 본문 전체가 아니라 RSS의 제목/요약만 사용합니다.
-    """
-    prompt = f"""
-다음은 NYTimes RSS 뉴스의 제목과 요약입니다.
-
-[영문 제목]
-{title_en}
-
-[영문 요약]
-{summary_en}
-
-작업:
-1. 제목을 자연스러운 한국어로 번역하세요.
-2. 요약을 자연스러운 한국어로 번역하세요.
-3. 핵심 키워드 5개를 한국어로 추출하세요.
-
-반드시 아래 JSON 형식으로만 답하세요.
-다른 설명 문장은 쓰지 마세요.
-
-{{
-  "title_ko": "한국어 제목",
-  "summary_ko": "한국어 요약",
-  "keywords_ko": ["키워드1", "키워드2", "키워드3", "키워드4", "키워드5"]
-}}
-"""
-
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-    )
-
-    result = parse_json_from_gemini_text(response.text)
-
-    return {
-        "title_ko": result.get("title_ko", title_en),
-        "summary_ko": result.get("summary_ko", summary_en),
-        "keywords_ko": result.get("keywords_ko", []),
-    }
-
-
-def translate_items(items: list[dict], use_gemini: bool, api_key: str | None) -> list[dict]:
-    """
-    뉴스 목록을 번역합니다.
-
-    USE_GEMINI=false 이거나 API Key가 없으면 원문을 그대로 사용합니다.
-    이렇게 하면 API 없이도 전체 파이프라인을 먼저 테스트할 수 있습니다.
-    """
-    if not use_gemini:
-        print("Gemini 번역 비활성화: 원문을 그대로 사용합니다.")
-        for item in items:
-            item["title_ko"] = item["title_en"]
-            item["summary_ko"] = item["summary_en"]
-            item["keywords_ko"] = []
-        return items
-
-    if not api_key:
-        print("[경고] GEMINI_API_KEY가 없습니다. 원문을 그대로 사용합니다.")
-        for item in items:
-            item["title_ko"] = item["title_en"]
-            item["summary_ko"] = item["summary_en"]
-            item["keywords_ko"] = []
-        return items
-
-    if genai is None:
-        print("[경고] google-genai 패키지를 불러올 수 없습니다. 원문을 그대로 사용합니다.")
-        for item in items:
-            item["title_ko"] = item["title_en"]
-            item["summary_ko"] = item["summary_en"]
-            item["keywords_ko"] = []
-        return items
-
-    client = genai.Client(api_key=api_key)
-
-    translated_items = []
-
-    for index, item in enumerate(items, start=1):
-        print(f"Gemini 번역 중... ({index}/{len(items)}) {item['title_en'][:40]}")
-
-        try:
-            result = translate_with_gemini(
-                client=client,
-                title_en=item["title_en"],
-                summary_en=item["summary_en"],
-            )
-
-            item["title_ko"] = result["title_ko"]
-            item["summary_ko"] = result["summary_ko"]
-            item["keywords_ko"] = result["keywords_ko"]
-
-        except Exception as e:
-            print(f"[경고] Gemini 번역 실패. 원문 사용: {e}")
-            item["title_ko"] = item["title_en"]
-            item["summary_ko"] = item["summary_en"]
-            item["keywords_ko"] = []
-
-        translated_items.append(item)
-
-        # API 호출을 너무 빠르게 반복하지 않도록 잠깐 쉽니다.
-        time.sleep(0.5)
-
-    return translated_items
-
-
-# -----------------------------
-# 4. 워드클라우드 생성
-# -----------------------------
-
-def make_wordcloud_text(items: list[dict]) -> str:
-    """
-    워드클라우드용 텍스트를 만듭니다.
-
-    초보 실습에서는 영문 제목/요약 기반 워드클라우드를 추천합니다.
-    이유:
-    - 영어는 단어가 공백으로 구분되어 WordCloud가 잘 동작합니다.
-    - 한국어 워드클라우드는 형태소 분석이나 폰트 설정이 필요해 난이도가 올라갑니다.
-    """
-    texts = []
-
-    for item in items:
-        texts.append(item.get("title_en", ""))
-        texts.append(item.get("summary_en", ""))
-
-        # Gemini가 추출한 한국어 키워드도 있으면 조금 추가합니다.
-        keywords = item.get("keywords_ko", [])
-        if isinstance(keywords, list):
-            texts.extend(keywords)
-
-    return " ".join(texts)
-
-
-def create_wordcloud_image(items: list[dict], output_path: Path, font_path: str | None = None) -> None:
-    """
-    워드클라우드 이미지를 생성합니다.
-    """
-    text = make_wordcloud_text(items)
-
-    if not text.strip():
-        text = "news technology artificial intelligence data cloud automation"
-
-    stopwords = set(STOPWORDS)
-    stopwords.update({
-        "said", "will", "new", "one", "two", "may", "also", "more",
-        "news", "york", "times", "nyt", "rss"
-    })
-
-    wc_kwargs = {
-        "width": 1200,
-        "height": 700,
-        "background_color": "white",
-        "stopwords": stopwords,
-        "collocations": False,
-    }
-
-    if font_path and Path(font_path).exists():
-        wc_kwargs["font_path"] = font_path
-
-    wordcloud = WordCloud(**wc_kwargs).generate(text)
-
-    plt.figure(figsize=(12, 7))
-    plt.imshow(wordcloud, interpolation="bilinear")
-    plt.axis("off")
-    plt.tight_layout(pad=0)
-    plt.savefig(output_path, dpi=150, bbox_inches="tight")
-    plt.close()
-
-    print(f"워드클라우드 저장 완료: {output_path}")
-
-
-# -----------------------------
-# 5. HTML 보고서 생성
-# -----------------------------
-
-def image_to_base64(image_path: Path) -> str:
-    """
-    이미지를 HTML 안에 직접 넣기 위해 base64 문자열로 변환합니다.
-    이렇게 하면 HTML 파일 하나만 이메일로 보내도 이미지가 같이 보입니다.
-    """
-    with open(image_path, "rb") as f:
-        encoded = base64.b64encode(f.read()).decode("utf-8")
-    return encoded
-
-
-def build_report_html(items: list[dict], wordcloud_path: Path, report_title: str) -> str:
-    """
-    HTML 보고서 문자열을 생성합니다.
-    """
-    image_base64 = image_to_base64(wordcloud_path)
-
-    now_text = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    rows_html = []
-
-    for index, item in enumerate(items, start=1):
-        keywords = item.get("keywords_ko", [])
-        if isinstance(keywords, list):
-            keyword_text = ", ".join(keywords)
-        else:
-            keyword_text = ""
-
-        rows_html.append(f"""
-        <tr>
-            <td>{index}</td>
-            <td>
-                <strong>{item.get('title_ko', '')}</strong><br>
-                <span class="small">원문: {item.get('title_en', '')}</span>
-            </td>
-            <td>{item.get('summary_ko', '')}</td>
-            <td>{keyword_text}</td>
-            <td><a href="{item.get('link', '')}" target="_blank">원문 보기</a></td>
-        </tr>
-        """)
-
-    rows = "\n".join(rows_html)
-
-    html = f"""
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>{report_title}</title>
-    <style>
-        body {{
-            font-family: Arial, 'Malgun Gothic', sans-serif;
-            margin: 40px;
-            line-height: 1.6;
-            color: #222;
-        }}
-        h1 {{
-            border-bottom: 3px solid #333;
-            padding-bottom: 10px;
-        }}
-        .summary-box {{
-            background: #f5f7fa;
-            border: 1px solid #d9dee7;
-            padding: 16px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }}
-        table {{
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }}
-        th, td {{
-            border: 1px solid #ddd;
-            padding: 10px;
-            vertical-align: top;
-        }}
-        th {{
-            background: #f0f0f0;
-        }}
-        .small {{
-            color: #666;
-            font-size: 0.9em;
-        }}
-        .wordcloud {{
-            max-width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }}
-        .footer {{
-            margin-top: 40px;
-            color: #777;
-            font-size: 0.9em;
-        }}
-    </style>
-</head>
-<body>
-    <h1>{report_title}</h1>
-
-    <div class="summary-box">
-        <p><strong>생성 시각:</strong> {now_text}</p>
-        <p><strong>뉴스 개수:</strong> {len(items)}건</p>
-        <p>
-            이 보고서는 NYTimes RSS에서 수집한 뉴스 제목과 요약을 기반으로 생성되었습니다.
-            기사 전문을 수집하거나 번역하지 않고, RSS에 포함된 제목/요약/링크만 사용합니다.
-        </p>
-    </div>
-
-    <h2>1. 주요 키워드 워드클라우드</h2>
-    <p>아래 이미지는 수집된 뉴스 제목과 요약에서 자주 등장한 단어를 시각화한 것입니다.</p>
-    <img class="wordcloud" src="data:image/png;base64,{image_base64}" alt="wordcloud">
-
-    <h2>2. 번역 뉴스 목록</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>번호</th>
-                <th>제목</th>
-                <th>요약</th>
-                <th>키워드</th>
-                <th>링크</th>
-            </tr>
-        </thead>
-        <tbody>
-            {rows}
-        </tbody>
-    </table>
-
-    <div class="footer">
-        <p>자동 생성 보고서 · Python + Gemini API + Google Drive + Make</p>
-    </div>
-</body>
-</html>
-"""
-
-    return html
-
-
-# -----------------------------
-# 6. CSV 저장 및 파일 이동
-# -----------------------------
-
-def save_translated_csv(items: list[dict], csv_path: Path) -> None:
-    """
-    번역 결과를 CSV로 저장합니다.
-    """
-    rows = []
-
-    for item in items:
-        keywords = item.get("keywords_ko", [])
-        if isinstance(keywords, list):
-            keyword_text = ", ".join(keywords)
-        else:
-            keyword_text = ""
-
-        rows.append({
-            "source": item.get("source", ""),
-            "title_en": item.get("title_en", ""),
-            "summary_en": item.get("summary_en", ""),
-            "title_ko": item.get("title_ko", ""),
-            "summary_ko": item.get("summary_ko", ""),
-            "keywords_ko": keyword_text,
-            "link": item.get("link", ""),
-            "published_at": item.get("published_at", ""),
-            "collected_at": item.get("collected_at", ""),
-            "source_file": item.get("source_file", ""),
-        })
-
-    df = pd.DataFrame(rows)
-    df.to_csv(csv_path, index=False, encoding="utf-8-sig")
-    print(f"CSV 저장 완료: {csv_path}")
-
-
-def archive_files(files: list[Path], archive_dir: Path) -> None:
-    """
-    처리 완료된 inbox JSON 파일을 archive 폴더로 이동합니다.
-    """
-    for file_path in files:
-        target_path = archive_dir / file_path.name
-
-        # 같은 이름이 이미 있으면 시간값을 붙입니다.
-        if target_path.exists():
-            stem = file_path.stem
-            suffix = file_path.suffix
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            target_path = archive_dir / f"{stem}_{timestamp}{suffix}"
-
-        shutil.move(str(file_path), str(target_path))
-        print(f"archive 이동 완료: {target_path}")
-
-
-# -----------------------------
-# 7. 메인 실행 함수
-# -----------------------------
-
-def main():
-    load_dotenv()
-
-    drive_base_dir = os.getenv("DRIVE_BASE_DIR")
-    gemini_api_key = os.getenv("GEMINI_API_KEY", "").strip()
-    use_gemini = os.getenv("USE_GEMINI", "true").lower() == "true"
-    max_items = int(os.getenv("MAX_ITEMS_PER_RUN", "20"))
-    font_path = os.getenv("FONT_PATH", "").strip() or None
-
-    if not drive_base_dir:
-        raise ValueError(".env 파일에 DRIVE_BASE_DIR 값을 입력해 주세요.")
-
-    base_dir = Path(drive_base_dir)
-    dirs = ensure_project_dirs(base_dir)
-
-    print("====================================")
-    print("NYTimes RSS 자동 보고서 생성 시작")
-    print("====================================")
-    print(f"Google Drive 기준 폴더: {base_dir}")
-    print(f"Gemini 사용 여부: {use_gemini}")
-
-    # 1. inbox JSON 읽기
-    items, used_files = load_all_inbox_items(
-        inbox_dir=dirs["inbox"],
-        max_items=max_items,
-    )
-
-    if not items:
-        print("처리할 JSON 파일이 없습니다.")
-        print(f"먼저 Make가 {dirs['inbox']} 폴더에 JSON 파일을 만들었는지 확인하세요.")
-        return
-
-    print(f"처리할 뉴스 개수: {len(items)}")
-    print(f"처리할 원본 파일 개수: {len(used_files)}")
-
-    # 2. Gemini 번역
-    translated_items = translate_items(
-        items=items,
-        use_gemini=use_gemini,
-        api_key=gemini_api_key,
-    )
-
-    # 3. 결과 파일명 생성
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    report_title = f"NYTimes RSS AI 뉴스 브리핑 - {datetime.now().strftime('%Y-%m-%d')}"
-
-    csv_path = dirs["outbox"] / f"nyt_translated_news_{timestamp}.csv"
-    wordcloud_path = dirs["outbox"] / f"nyt_wordcloud_{timestamp}.png"
-    report_path = dirs["outbox"] / f"nyt_report_{timestamp}.html"
-    log_path = dirs["logs"] / f"run_log_{timestamp}.txt"
-
-    # 4. CSV 저장
-    save_translated_csv(translated_items, csv_path)
-
-    # 5. 워드클라우드 생성
-    create_wordcloud_image(
-        items=translated_items,
-        output_path=wordcloud_path,
-        font_path=font_path,
-    )
-
-    # 6. HTML 보고서 생성
-    html = build_report_html(
-        items=translated_items,
-        wordcloud_path=wordcloud_path,
-        report_title=report_title,
-    )
-
-    with open(report_path, "w", encoding="utf-8") as f:
-        f.write(html)
-
-    print(f"HTML 보고서 저장 완료: {report_path}")
-
-    # 7. 로그 저장
-    with open(log_path, "w", encoding="utf-8") as f:
-        f.write("NYTimes RSS 자동 보고서 생성 완료\n")
-        f.write(f"생성 시각: {datetime.now().isoformat()}\n")
-        f.write(f"뉴스 개수: {len(translated_items)}\n")
-        f.write(f"CSV: {csv_path}\n")
-        f.write(f"WordCloud: {wordcloud_path}\n")
-        f.write(f"Report: {report_path}\n")
-
-    print(f"로그 저장 완료: {log_path}")
-
-    # 8. 원본 JSON archive 이동
-    archive_files(used_files, dirs["archive"])
-
-    print("====================================")
-    print("전체 처리 완료")
-    print("====================================")
-    print(f"보고서 파일: {report_path}")
-    print("이제 Make Scenario 2가 outbox의 새 HTML 파일을 감지하여 이메일을 보낼 수 있습니다.")
-
-
-if __name__ == "__main__":
-    main()
+report_path = run_pipeline()
+report_path
 ```
 
 ---
 
 ## 13. 먼저 샘플 데이터로 테스트하기
 
-Make 설정이 아직 안 되어 있어도 샘플 JSON을 만들어 전체 흐름을 테스트할 수 있습니다.
+Make 설정이 아직 안 되어 있어도 노트북만으로 전체 흐름을 테스트할 수 있습니다.
 
-### 13.1 샘플 JSON 생성
-
-터미널에서 실행합니다.
-
-```bash
-python src/create_sample_input.py
-```
-
-실행 결과 예시:
+### 13.1 셀 실행 순서
 
 ```text
+1. 셀 1: 설정값 하드코딩
+2. 셀 2: 공통 함수 정의
+3. 셀 3: create_sample_input() 실행
+4. 셀 4: run_pipeline() 실행
+```
+
+### 13.2 실행 결과 예시
+
+```text
+설정 완료
+Google Drive 기준 폴더: G:\내 드라이브\nyt_news_project
+Gemini 사용 여부: True
 샘플 파일 생성 완료: G:\내 드라이브\nyt_news_project\inbox\sample_nyt_20260610_090000_1.json
 샘플 파일 생성 완료: G:\내 드라이브\nyt_news_project\inbox\sample_nyt_20260610_090000_2.json
 샘플 파일 생성 완료: G:\내 드라이브\nyt_news_project\inbox\sample_nyt_20260610_090000_3.json
-```
-
-### 13.2 메인 실행
-
-```bash
-python src/main.py
-```
-
-실행 결과 예시:
-
-```text
 ====================================
 NYTimes RSS 자동 보고서 생성 시작
 ====================================
@@ -1418,13 +1118,13 @@ status    : sent
 
 실제 시연은 다음 순서로 진행하면 됩니다.
 
-### 15.1 1차 시연: Make 없이 Python만 테스트
+### 15.1 1차 시연: Make 없이 Notebook만 테스트
 
 ```text
 1. Google Drive for desktop 동기화 확인
-2. .env 설정
-3. python src/create_sample_input.py 실행
-4. python src/main.py 실행
+2. 노트북 설정 셀 값 입력
+3. create_sample_input() 셀 실행
+4. run_pipeline() 셀 실행
 5. outbox에 HTML 보고서 생성 확인
 ```
 
@@ -1434,7 +1134,7 @@ status    : sent
 1. Make Scenario 1 Run once 실행
 2. Google Drive inbox에 JSON 생성 확인
 3. 로컬 PC inbox 동기화 확인
-4. python src/main.py 실행
+4. run_pipeline() 셀 실행
 5. outbox에 HTML 보고서 생성 확인
 ```
 
@@ -1442,7 +1142,7 @@ status    : sent
 
 ```text
 1. Make Scenario 2 활성화
-2. Python으로 outbox에 HTML 보고서 생성
+2. 노트북에서 outbox HTML 보고서 생성
 3. Make가 새 보고서 감지
 4. Gmail 발송 확인
 5. Google Sheets 로그 확인
@@ -1455,7 +1155,7 @@ status    : sent
 ```text
 이번 프로젝트는 RSS 뉴스 데이터를 자동으로 수집하고,
 Google Drive를 데이터 저장소로 사용한 뒤,
-로컬 Python이 파일을 읽어 번역, 키워드 분석, 워드클라우드 생성을 수행합니다.
+로컬 Jupyter Notebook이 파일을 읽어 번역, 키워드 분석, 워드클라우드 생성을 수행합니다.
 
 완성된 HTML 보고서는 다시 Google Drive에 저장되고,
 Make가 해당 파일을 감지해 Gmail로 자동 발송합니다.
@@ -1473,19 +1173,19 @@ Make가 해당 파일을 감지해 Gmail로 자동 발송합니다.
 원인:
 
 ```text
-.env 파일에 DRIVE_BASE_DIR이 비어 있음
+노트북 설정 셀의 DRIVE_BASE_DIR 값이 비어 있음
 ```
 
 해결:
 
 ```text
-.env 파일에 Google Drive 동기화 폴더 경로 입력
+노트북 설정 셀에 Google Drive 동기화 폴더 경로 입력
 ```
 
 예시:
 
-```env
-DRIVE_BASE_DIR=G:\내 드라이브\nyt_news_project
+```python
+DRIVE_BASE_DIR = r"G:\내 드라이브\nyt_news_project"
 ```
 
 ---
@@ -1504,7 +1204,7 @@ Google Drive 동기화가 늦어졌을 수 있음
 ```text
 1. Google Drive 웹에서 inbox 폴더 확인
 2. PC의 Google Drive 폴더에도 파일이 내려왔는지 확인
-3. 먼저 python src/create_sample_input.py로 샘플 파일 생성 후 테스트
+3. 먼저 create_sample_input() 셀로 샘플 파일 생성 후 테스트
 ```
 
 ---
@@ -1523,9 +1223,9 @@ google-genai 설치 오류
 해결:
 
 ```text
-1. .env의 GEMINI_API_KEY 확인
+1. 노트북 설정 셀의 GEMINI_API_KEY 확인
 2. pip install google-genai 재실행
-3. USE_GEMINI=false로 바꿔서 전체 흐름 먼저 테스트
+3. USE_GEMINI = False 로 바꿔서 전체 흐름 먼저 테스트
 ```
 
 ---
@@ -1538,14 +1238,14 @@ google-genai 설치 오류
 
 Windows 예시:
 
-```env
-FONT_PATH=C:\Windows\Fonts\malgun.ttf
+```python
+FONT_PATH = r"C:\Windows\Fonts\malgun.ttf"
 ```
 
 macOS 예시:
 
-```env
-FONT_PATH=/System/Library/Fonts/AppleSDGothicNeo.ttc
+```python
+FONT_PATH = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
 ```
 
 다만 한국어는 공백 기준 단어 분리가 정확하지 않을 수 있으므로, 초급 실습에서는 영문 제목/요약 기반 워드클라우드를 추천합니다.
@@ -1572,7 +1272,7 @@ File name ends with .html
 ```text
 1. Make Scenario 1 화면 캡처
 2. Google Drive inbox JSON 파일 캡처
-3. Python 실행 화면 캡처
+3. Notebook 실행 화면 캡처
 4. Google Drive outbox 결과 파일 캡처
 5. HTML 보고서 파일
 6. Gmail 수신 결과 캡처
@@ -1586,7 +1286,7 @@ File name ends with .html
 |---|---:|
 | Make RSS 수집 구성 | 15 |
 | Google Drive 파일 저장 구조 | 15 |
-| Python JSON 읽기 및 처리 | 15 |
+| Notebook JSON 읽기 및 처리 | 15 |
 | Gemini API 번역 활용 | 15 |
 | 워드클라우드 생성 | 15 |
 | HTML 보고서 생성 | 10 |
@@ -1660,13 +1360,13 @@ Make Scheduler를 매일 오전 8시에 실행하도록 설정합니다.
 ```text
 매일 오전 8시 RSS 수집
 ↓
-오전 8시 10분 Python 실행
+오전 8시 10분 Notebook 실행
 ↓
 오전 8시 20분 Gmail 발송
 ```
 
-단, 로컬 Python은 PC가 켜져 있어야 실행됩니다.
-완전 자동화를 원하면 Python 부분을 클라우드 서버, Cloud Run, GitHub Actions 등으로 옮길 수 있습니다.
+단, 로컬 Notebook은 PC가 켜져 있어야 실행됩니다.
+완전 자동화를 원하면 Notebook 코드를 `.py` 배치 작업이나 클라우드 서버, Cloud Run, GitHub Actions 등으로 옮길 수 있습니다.
 
 ---
 
@@ -1679,9 +1379,9 @@ Make:
 RSS 수집, Google Drive 저장, Gmail 발송
 
 Google Drive:
-Make와 Python 사이의 파일 전달 공간
+Make와 Notebook 사이의 파일 전달 공간
 
-Python:
+Jupyter Notebook:
 번역, 전처리, 워드클라우드, 보고서 생성
 
 Gemini API:
@@ -1691,9 +1391,9 @@ Gemini API:
 초보자는 처음부터 모든 것을 완전 자동화하려고 하기보다 다음 순서로 진행하는 것이 좋습니다.
 
 ```text
-1단계: 샘플 JSON으로 Python 보고서 생성
+1단계: 샘플 JSON으로 Notebook 보고서 생성
 2단계: Make로 RSS JSON 저장
-3단계: Python으로 실제 JSON 처리
+3단계: Notebook으로 실제 JSON 처리
 4단계: Make로 Gmail 발송
 5단계: Google Sheets 로그 추가
 ```
@@ -1704,17 +1404,12 @@ Gemini API:
 
 ## 부록 A. 전체 파일 목록
 
-최종적으로 작성해야 하는 파일은 다음 5개입니다.
+최종적으로 작성해야 하는 파일은 다음 2개입니다.
 
 ```text
 nyt_rss_local_processor/
 │
-├── src/
-│   ├── create_sample_input.py
-│   └── main.py
-│
-├── .env
-├── .env.example
+├── nyt_rss_make_drive_gemini.ipynb
 └── requirements.txt
 ```
 
@@ -1729,9 +1424,9 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -r requirements.txt
-python src/create_sample_input.py
-python src/main.py
 ```
+
+그 다음 VS Code에서 `nyt_rss_make_drive_gemini.ipynb`를 열고 셀을 순서대로 실행합니다.
 
 macOS / Linux 기준:
 
@@ -1740,9 +1435,9 @@ python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
-python src/create_sample_input.py
-python src/main.py
 ```
+
+그 다음 VS Code에서 `nyt_rss_make_drive_gemini.ipynb`를 열고 셀을 순서대로 실행합니다.
 
 ---
 
