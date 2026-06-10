@@ -1,0 +1,16 @@
+import matplotlib.pyplot as plt
+
+# 한글 폰트 설정
+plt.rcParams["font.family"] = "Malgun Gothic"
+plt.rcParams["axes.unicode_minus"] = False
+
+menus = ["아메리카노", "카페라떼", "샌드위치"]
+sales = [54000, 40000, 32500]
+
+plt.bar(menus, sales)
+
+plt.title("메뉴별 매출")
+plt.xlabel("메뉴")
+plt.ylabel("매출")
+
+plt.show()

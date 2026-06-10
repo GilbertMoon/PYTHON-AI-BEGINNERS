@@ -1,0 +1,15 @@
+new_student = pd.DataFrame([{
+    "grade_level": 2,
+    "study_hours_per_week": 10,
+    "attendance_rate": 90,
+    "assignment_score": 85,
+    "quiz_avg": 80,
+    "midterm_score": 82,
+    "sleep_hours": 7,
+    "screen_time_hours": 4,
+    "tutoring": 1,
+    "previous_score": 78,
+    "class_group_A": 0,
+    "class_group_B": 1,
+    "class_group_C": 0
+}])
