@@ -435,6 +435,7 @@ except ImportError:
 # 테스트용 설정값 직접 입력
 # =============================
 GEMINI_API_KEY = "여기에_테스트용_Gemini_API_Key_직접입력"
+GEMINI_MODEL_NAME = "gemini-flash-lite-latest"
 DRIVE_BASE_DIR = r"G:\내 드라이브\nyt_news_project"
 USE_GEMINI = True
 MAX_ITEMS_PER_RUN = 20
@@ -453,6 +454,7 @@ for path in [BASE_DIR, INBOX_DIR, OUTBOX_DIR, ARCHIVE_DIR, LOGS_DIR]:
 print("설정 완료")
 print("Google Drive 기준 폴더:", BASE_DIR)
 print("Gemini 사용 여부:", USE_GEMINI)
+print("Gemini 모델명:", GEMINI_MODEL_NAME)
 ```
 
 Gemini 없이 먼저 테스트하려면 아래처럼 바꾸면 됩니다.
@@ -578,7 +580,7 @@ def parse_json_from_gemini_text(text):
     return {}
 
 
-def translate_with_gemini(client, title_en, summary_en):
+def translate_with_gemini(client, model_name, title_en, summary_en):
     prompt = f"""
 다음은 NYTimes RSS 뉴스의 제목과 요약입니다.
 
@@ -603,7 +605,7 @@ def translate_with_gemini(client, title_en, summary_en):
 """
 
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model=model_name,
         contents=prompt,
     )
 
@@ -616,7 +618,7 @@ def translate_with_gemini(client, title_en, summary_en):
     }
 
 
-def translate_items(items, use_gemini, api_key):
+def translate_items(items, use_gemini, api_key, model_name):
     if not use_gemini:
         print("Gemini 번역 비활성화: 원문을 그대로 사용합니다.")
         for item in items:
@@ -646,7 +648,7 @@ def translate_items(items, use_gemini, api_key):
     for index, item in enumerate(items, start=1):
         print(f"Gemini 번역 중... ({index}/{len(items)}) {item['title_en'][:40]}")
         try:
-            result = translate_with_gemini(client, item["title_en"], item["summary_en"])
+            result = translate_with_gemini(client, model_name, item["title_en"], item["summary_en"])
             item["title_ko"] = result["title_ko"]
             item["summary_ko"] = result["summary_ko"]
             item["keywords_ko"] = result["keywords_ko"]
@@ -836,7 +838,7 @@ def run_pipeline():
     print("처리할 뉴스 개수:", len(items))
     print("처리할 원본 파일 개수:", len(used_files))
 
-    translated_items = translate_items(items, USE_GEMINI, GEMINI_API_KEY)
+    translated_items = translate_items(items, USE_GEMINI, GEMINI_API_KEY, GEMINI_MODEL_NAME)
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     report_title = f"NYTimes RSS AI 뉴스 브리핑 - {datetime.now().strftime('%Y-%m-%d')}"
